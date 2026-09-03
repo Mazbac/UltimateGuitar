@@ -13,7 +13,8 @@
     ".project/context-map.json",
     "docs/CONTEXT_RESOLUTION.md",
     "docs/DEFINITION_OF_DONE.md",
-    "docs/TOOL_POLICY.md"
+    "docs/TOOL_POLICY.md",
+    "docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md"
   ],
   "lifecycle": {
     "TEMPLATE": [

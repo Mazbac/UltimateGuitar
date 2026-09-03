@@ -68,3 +68,33 @@ Reason: implementation authors/models are vulnerable to familiarity and confirma
 Status: accepted
 Decision: keep v3 stack/product-neutral. The template requires intent, component/terminology consistency, realistic-state stress, platform behavior and evidence, while each derived project defines concrete surfaces, breakpoints/windowing, icon system, tokens and applicable environments.
 Reason: hard-coding QuickShelf/SaaS-specific design choices would reduce reuse and confuse examples with universal principles.
+
+## D-014 — v0.1 is a native Windows VST3 instrument
+Status: accepted
+Decision: First release targets Windows x64 VST3 with FL Studio as the primary host and implements only Palm Mute / Downstroke / Middle.
+Reason: this directly replaces the current Sforzando workflow with the smallest independently useful native instrument.
+
+## D-015 — Use iPlug2 + VST3 for the first native implementation
+Status: accepted
+Decision: Use pinned iPlug2 with its CMake/out-of-source pattern and the MIT-licensed VST3 SDK. Keep application/domain code behind project-owned boundaries.
+Reason: iPlug2 supports the required Windows VST3 target with a liberal license and avoids paid framework licensing while remaining much lighter than HISE.
+
+## D-016 — MIDI mapping is sparse and string-exclusive
+Status: accepted
+Decision: MIDI 11-23 maps only to String 1, 28-40 only to String 2, 45-57 only to String 3 and 62-74 only to String 4. Gaps are intentionally silent. Left/Right performance banks never mix.
+Reason: this is the verified physical/sample-library structure and fixes prior accidental cross-string mapping.
+
+## D-017 — Variation uses real available samples, never nominal take slots
+Status: accepted
+Decision: Each side+note has an independent shuffled bag built from manifest entries that actually exist. Missing/non-contiguous take numbers do not create placeholders or silence.
+Reason: the real library already contains valid 11/14/15-take pools; fixed 16-position assumptions caused the failure class the native plugin must eliminate.
+
+## D-018 — Raw sample audio stays out of ordinary Git history
+Status: accepted
+Decision: Git stores code, manifest/schema metadata, reports and tiny fixtures. The private raw WAV library remains an external product asset and release packaging creates a stable installed sample layout.
+Reason: the current single articulation is already about 0.5 GiB and future articulations will grow substantially.
+
+## D-019 — v0.1 preloads through a shared process cache
+Status: accepted
+Decision: Load/decode the validated bank off the audio thread into a process-wide immutable cache shared by plugin instances. Palm mutes remain one-shot and note-off does not choke them.
+Reason: the current bank is manageable in memory once, while two normal Left/Right instances should not duplicate roughly 0.5 GiB each. This is simpler and safer than introducing disk streaming in the first release.

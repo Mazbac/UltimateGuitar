@@ -2,33 +2,27 @@
 
 - Lifecycle: TEMPLATE
 - Foundation status: READY
-- Foundation v2 merge: `26951f5b25759ad96bcf5d6c789acf6aaff9badd`
-- Foundation v3 implementation PR: #5
-- Foundation v3 reviewed head: `4980e136f3e950b204a22c76a2b102318a9dc6ac`
-- Foundation v3 implementation merge: `e81a3f8130362f587bd6b30c565e8f2a796da9e5`
 - Manifest schema: v3
-- Local v3 clean-commit validation: GREEN
-- Independent v3 PR validation: GREEN — run `33799443775`, job `100794968972`
-- Post-implementation `main` validation: GREEN — run `33799511017`, job `100795206032`
-- Local direct-default-branch guard: VERIFIED BLOCKING
+- Project discovery: COMPLETE for v0.1 native palm-mute VST direction
+- Written design: `docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md`
+- Design review: PENDING user review of written spec
+- Project activation: NOT STARTED; intentionally blocked on written-spec approval
+- Working branch: `product/v0.1-design`
 
-## Verified v3 foundation
-- Deterministic context map/compiler resolves lifecycle, scope and manifest-referenced sources into a hashed pack with a literal completion marker.
-- Context freshness detects source drift and revision drift; local feature pushes require a current full/all receipt.
-- Baseline context mappings are machine-enforced so derived projects may extend but cannot silently weaken the inherited reading contract.
-- Mandatory quality-policy flags are schema-locked to true rather than optional booleans.
-- VERIFY and later require tracked project quality evidence with PASS overall/challenger status and no `UNSET`/`PENDING` placeholders.
-- Project UI design contracts cover surface intent/hierarchy, equivalent-component behavior, terminology, content stress and platform/windowing/adaptive behavior.
-- Design/experience verification includes AI-default/removal audit, realistic-content/environment stress and a fresh-eyes challenger review.
-- Derived-project CI must run repository validation, context integrity and deterministic context resolution.
-- Template adversarial tests reject schema/status drift, incomplete context/design activation, disabled mandatory gates, weakened context maps, incomplete VERIFY evidence and stale/revision-mismatched context packs.
-- `.editorconfig` establishes cross-platform UTF-8/LF text behavior; clean-restore and pre-commit/untracked secret-scan expectations are explicit.
+## Verified live evidence
+- Desktop Commander connected to the user's Windows machine.
+- Local project clone exists at `C:\Users\Alihan & Maaike\Documents\UltimateGuitar`.
+- Template validator, context integrity and context-pack freshness are green for the current discovery state.
+- GitHub has no open pull request for this repository at the start of this slice.
+- Real sample source located at `C:\Users\Alihan & Maaike\Music\UltimateGuitar\00_RAW_Recordings\Palm Mutes\Down Stroke`.
+- Current bank contains 1,655 WAVs / about 0.504 GiB; all inspected files are stereo 48 kHz 32-bit IEEE-float WAVs.
+- Canonical mapping verified from current SFZ/report and folders: S1 MIDI 11-23, S2 28-40, S3 45-57, S4 62-74.
+- Incomplete pools verified: Left S1 D#=15; Right S1 E=11; Right S2 F=15; Right S3 G#=14.
 
 ## Current priority
-Foundation v3 is ready for normal template use. Future template changes should be intentional maintenance through the same context, adversarial-test, PR and CI discipline; ordinary product work belongs in repositories derived from this template.
-
-## Platform constraint
-GitHub server-side rulesets/classic branch protection remain unavailable for this private repository on the current plan. The versioned local pre-push guard remains defense-in-depth; PR + green independent CI is mandatory policy. Enable server-side protection if the plan/visibility later supports it.
+Get written-spec approval. Then use the writing-plans workflow, activate the repository as a concrete project, establish the pinned iPlug2/VST3 Windows toolchain and CI, and implement the first vertical slice test-first.
 
 ## Known blockers
-None for normal template use.
+- No product blocker.
+- Local CMake/MSVC build tools were not found on PATH during discovery; implementation must either locate an existing Visual Studio installation or install/configure the required free Windows C++ toolchain autonomously where authorization permits.
+- Public distribution under the internal name `UltimateGuitar` is not part of v0.1; public naming/trademark review is required before external release.
