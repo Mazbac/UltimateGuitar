@@ -26,3 +26,16 @@
 | Mandatory quality gate disabled in derived project | Project weakens template promise while remaining schema-valid | Schema locks non-negotiable quality policy fields to true |
 
 New material risks must be added when discovered and closed only with evidence.
+## UltimateGuitar v0.1 project-specific risks
+
+| Risk | Impact | Required mitigation |
+|---|---|---|
+| Fixed 16-take logic reappears | Valid repeated notes become silent on incomplete pools | Manifest enumerates real files; variation tests include 11/14/15-take and non-contiguous pools |
+| String zones overlap or borrow samples | Wrong physical string/timbre plays for a MIDI note | MIDI-number mapping is canonical and unit-tested as one-string-only with intentional silent gaps |
+| Per-instance full sample duplication | Normal Left+Right workflow consumes excessive RAM | Process-wide immutable shared cache keyed by library version/root |
+| Sample I/O or allocation reaches audio thread | Clicks, dropouts or host instability | Background loading; immutable ready buffers; instrumentation/tests for real-time path constraints |
+| Host sample rate differs from 48 kHz recordings | Pitch/duration errors | Explicit resampling path and 44.1/48/96 kHz tests |
+| Sample library path changes or packaging differs from raw tree | Plugin loads but cannot find audio | Stable release layout, manifest-relative paths, automatic discovery and Locate Sample Library recovery |
+| Future articulations make preload architecture too large | Startup/RAM becomes unacceptable | Keep SampleLibrary boundary streaming-ready; defer streaming until measured bank size/performance requires it |
+| Windows build toolchain absent locally | Local native build cannot start | Detect/install or locate supported free MSVC/CMake tooling during implementation; CI provides independent Windows build evidence |
+| Internal `UltimateGuitar` name conflicts with an existing public brand | Public distribution may create trademark/confusion risk | Treat as internal codename for v0.1; require explicit public naming/trademark review before external release |

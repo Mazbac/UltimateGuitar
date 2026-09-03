@@ -1,38 +1,36 @@
 # Project Definition
 
 ## Status
-Template state. Replace this document during discovery for each derived project.
+Discovery and written v0.1 design are approved. The implementation plan is complete; repository activation is the first execution task.
 
 ## Product intent
-- Problem: UNSET
-- Primary user: UNSET
-- Desired outcome: UNSET
-- First useful release: UNSET
-- Explicit non-goals: UNSET
+- Problem: the current Sforzando/SFZ prototype can mis-handle string/sample pools and may produce silent repeated notes; the user needs a dependable native guitar instrument.
+- Primary user: a music producer programming metal guitar in FL Studio from the user's own recorded sample library.
+- Desired outcome: insert one VST3 instrument, choose Left or Right performance samples, and play/program exact recorded palm-muted notes with convincing variation and no cross-string mixing or missing-take silence.
+- First useful release: Windows x64 VST3 implementing Palm Mute / Downstroke / Middle across four strict string zones and both Left/Right banks.
+- Explicit non-goals: other articulations, amp/cab FX, chord/fingering engine, macOS, public commercial branding and large raw audio in ordinary Git history.
 
 ## Product experience
-- Target audience / expertise: UNSET
-- First useful outcome: UNSET
-- Distribution/install expectations: UNSET
-- Setup/onboarding constraints: UNSET
-- Update/recovery/uninstall expectations: UNSET
+- Target audience / expertise: DAW user; should not need developer tooling or SFZ knowledge.
+- First useful outcome: VST3 loads in FL Studio, reports sample library Ready, then all mapped notes play immediately and reliably.
+- Distribution/install expectations: normal Windows installer; one-time UAC elevation is accepted because FL Studio requires VST3 in its documented Program Files scan location. Versioned sample content is installed as shared read-only product data; user settings remain per-user.
+- Setup/onboarding constraints: automatic sample discovery is primary; a single Locate Sample Library recovery action exists when discovery fails.
+- Update/recovery/uninstall expectations: versioned sample bank and settings must be recoverable; uninstall must not leave unexplained runtime artifacts.
 
 ## Brand / creative input
-- Existing brand/assets: UNSET
-- Colors/typography/tone: UNSET
-- User references/inspiration: UNSET
-- Explicit durable likes/dislikes: UNSET
-
-These inputs may be incomplete or absent. ChatGPT derives ordinary product/design decisions rather than requiring the user to write a professional brief.
+- Existing brand/assets: internal project/repository name `UltimateGuitar`; no public release identity approved.
+- Colors/typography/tone: aggressive Ferrari-red + black metal-instrument direction with sharp asymmetric geometry and restrained metallic highlights; exact tokens/typography are finalized in DESIGN.
+- User references/inspiration: Jackson JS32T Warrior Ferrari Red for visual energy/geometry only, plus the existing FL Studio/Sforzando workflow and the user's real Left/Right guitar recordings; no Jackson logos or literal copied product design.
+- Explicit durable likes/dislikes: strict no-string-mixing; natural variation; no randomly silent notes; keep the workflow simple inside FL Studio.
 
 ## Constraints
-- User communicates requirements in natural language and is not a technical intermediary.
-- Prefer no paid service or vendor lock-in unless the product explicitly requires it and the user accepts it.
-- Security, reliability, maintainability, professional design and professional product experience are release requirements, not polish tasks.
-- Hide implementation complexity from ordinary users when the product can reasonably absorb it.
-- Automate reproducible work instead of depending on undocumented local or conversational state.
-- Preserve session invariance by persisting durable product meaning in the repository and resolving required context deterministically.
-- Treat first-pass AI-generated UI/UX as a draft subject to explicit design contracts, stress review and challenger evidence.
+- Canonical MIDI mapping is String 1 = 11-23, String 2 = 28-40, String 3 = 45-57, String 4 = 62-74.
+- A MIDI note resolves to exactly one string and one selected performance side.
+- Current source WAVs are stereo 48 kHz 32-bit IEEE float and must play without quality-damaging offline conversion in the development source.
+- Incomplete/non-contiguous take pools are normal and must never create silent round-robin positions.
+- Audio-thread work must be real-time safe: no filesystem I/O, blocking locks or heap allocation in the render callback.
+- Prefer no paid framework or vendor lock-in; v0.1 architecture uses iPlug2 + VST3.
+- The user's raw sample library is product content, not source-control history.
 
 ## Acceptance
-A release is accepted only when the user-facing outcome, applicable golden journeys and `docs/DEFINITION_OF_DONE.md` are satisfied with evidence.
+A cleanly installed Windows x64 VST3 in FL Studio plays every valid mapped note from the correct string and selected Left/Right bank, survives rapid repeated note-ons without unexplained silence, restores its state on project reopen, and passes project verification plus VST3/host smoke tests.

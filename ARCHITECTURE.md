@@ -26,4 +26,10 @@ This repository separates stable delivery rules from project-specific implementa
 10. Treat required context and verification evidence as explicit dependencies; do not rely on model memory or self-attestation.
 
 ## Project-specific architecture
-UNSET until discovery. Replace this section with concrete components, data flows, trust boundaries, deployment/distribution topology and project conventions.
+The approved v0.1 direction is a Windows x64 VST3 instrument built with pinned iPlug2/VST3 dependencies. Project-owned boundaries are `SampleManifest`, `SampleLibrary`, `VariationEngine`, `VoiceEngine`, `PluginState`, `PluginUI` and a developer/release `LibraryTool`.
+
+The runtime trust boundary is local MIDI + host audio/state input and a versioned local sample bank. The audio callback never performs filesystem I/O, heap allocation, blocking synchronization, logging or UI work. Sample loading/decoding occurs off-thread into immutable buffers held by a process-wide cache shared by plugin instances.
+
+The canonical sparse MIDI map is S1 11-23, S2 28-40, S3 45-57 and S4 62-74. A note maps to exactly one string and the selected Left/Right performance bank. Variation selects only manifest entries that actually exist; incomplete take numbering is valid.
+
+Raw WAVs remain outside ordinary Git history. Development resolves the private source bank through a local override; release packaging creates a stable per-user product-owned sample layout. Detailed v0.1 behavior is defined in `docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md`.
