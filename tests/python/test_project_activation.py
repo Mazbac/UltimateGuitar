@@ -34,7 +34,7 @@ class ProjectActivationTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         info = json.loads(result.stdout.strip().splitlines()[-1])
         self.assertTrue(info["supported"])
-        self.assertIn(int(info["visualStudioYear"]), (2019, 2022))
+        self.assertIn(int(info["visualStudioYear"]), (2019, 2022, 2026))
         major, minor, *_ = [int(x) for x in info["cmakeVersion"].split(".")]
         self.assertGreaterEqual((major, minor), (3, 14))
         self.assertTrue(pathlib.Path(info["vsDevCmd"]).is_file())
@@ -161,3 +161,18 @@ def _git_hygiene_regression_tests():
     ProjectActivationTests.test_python_bytecode_is_git_ignored = test_python_bytecode_is_git_ignored
 
 _git_hygiene_regression_tests()
+
+
+def _hosted_runner_toolchain_regression_tests():
+    def test_toolchain_probe_supports_windows_2025_vs2026_image(self):
+        script = (ROOT / "scripts" / "bootstrap-toolchain.ps1").read_text(encoding="utf-8")
+        self.assertIn("Year = 2026", script)
+        self.assertIn("Microsoft Visual Studio\\18\\Enterprise", script)
+        self.assertIn("Microsoft Visual Studio\\18\\BuildTools", script)
+        self.assertNotIn("No supported Visual Studio 2019/2022 C++ toolchain", script)
+
+    ProjectActivationTests.test_toolchain_probe_supports_windows_2025_vs2026_image = (
+        test_toolchain_probe_supports_windows_2025_vs2026_image
+    )
+
+_hosted_runner_toolchain_regression_tests()

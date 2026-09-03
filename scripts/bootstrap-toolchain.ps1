@@ -14,6 +14,9 @@ function Get-CMakeVersion([string]$CMakePath) {
 function Find-SupportedToolchain {
   $programFilesX86 = [Environment]::GetFolderPath([Environment+SpecialFolder]::ProgramFilesX86)
   $roots = @(
+    @{ Year = 2026; Path = "$env:ProgramFiles\Microsoft Visual Studio\18\Enterprise" },
+    @{ Year = 2026; Path = "$env:ProgramFiles\Microsoft Visual Studio\18\BuildTools" },
+    @{ Year = 2026; Path = "$env:ProgramFiles\Microsoft Visual Studio\18\Community" },
     @{ Year = 2022; Path = "$env:ProgramFiles\Microsoft Visual Studio\2022\BuildTools" },
     @{ Year = 2022; Path = "$env:ProgramFiles\Microsoft Visual Studio\2022\Community" },
     @{ Year = 2019; Path = "$programFilesX86\Microsoft Visual Studio\2019\BuildTools" },
@@ -76,7 +79,7 @@ if (-not $toolchain -and -not $CheckOnly) {
 }
 
 if (-not $toolchain) {
-  Write-Error 'No supported Visual Studio 2019/2022 C++ toolchain with CMake >= 3.14 was found.'
+  Write-Error 'No supported Visual Studio C++ toolchain with CMake >= 3.14 was found.'
   exit 2
 }
 

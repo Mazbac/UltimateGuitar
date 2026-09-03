@@ -108,3 +108,8 @@ Reason: the user's existing VS2019 Build Tools has a complete MSVC/SDK/CMake/Nin
 Status: accepted
 Decision: Pin the VST3 SDK superproject and restore `base`, `cmake`, `pluginterfaces` and `public.sdk`; do not recursively checkout unrelated documentation/tutorial/VSTGUI submodules for the plugin build.
 Reason: the full recursive SDK checkout pulls the `doc` submodule and hit Windows MAX_PATH, while the selected build-required submodules are sufficient for the project-owned VST3 build path. The validator may add only the dependencies it actually needs when verified later.
+
+## D-022 — Support Visual Studio 2026 hosted runners
+Status: accepted
+Decision: Extend toolchain discovery to Visual Studio 2026 (18/Enterprise, BuildTools and Community) while retaining verified VS2019/2022 compatibility.
+Reason: GitHub Actions windows-2025 now resolves to the VS2026 runner image, and independent CI proved the older 2019/2022-only probe rejected an otherwise valid C++ runner.
