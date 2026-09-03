@@ -37,5 +37,5 @@ New material risks must be added when discovered and closed only with evidence.
 | Host sample rate differs from 48 kHz recordings | Pitch/duration errors | Explicit resampling path and 44.1/48/96 kHz tests |
 | Sample library path changes or packaging differs from raw tree | Plugin loads but cannot find audio | Stable release layout, manifest-relative paths, automatic discovery and Locate Sample Library recovery |
 | Future articulations make preload architecture too large | Startup/RAM becomes unacceptable | Keep SampleLibrary boundary streaming-ready; defer streaming until measured bank size/performance requires it |
-| Windows build toolchain absent locally | Local native build cannot start | Detect/install or locate supported free MSVC/CMake tooling during implementation; CI provides independent Windows build evidence |
+| Windows toolchain discovery depends on IDE registration | Build bootstrap can falsely report no compiler even when Build Tools exist | Detect VS2019/2022 from filesystem, enter VsDevCmd.bat, use Ninja, and keep CI as independent Windows evidence |
 | Internal `UltimateGuitar` name conflicts with an existing public brand | Public distribution may create trademark/confusion risk | Treat as internal codename for v0.1; require explicit public naming/trademark review before external release |

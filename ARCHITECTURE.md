@@ -33,3 +33,9 @@ The runtime trust boundary is local MIDI + host audio/state input and a versione
 The canonical sparse MIDI map is S1 11-23, S2 28-40, S3 45-57 and S4 62-74. A note maps to exactly one string and the selected Left/Right performance bank. Variation selects only manifest entries that actually exist; incomplete take numbering is valid.
 
 Raw WAVs remain outside ordinary Git history. Development resolves the private source bank through a local override; release packaging creates a stable per-user product-owned sample layout. Detailed v0.1 behavior is defined in `docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md`.
+## Windows build architecture
+Local and CI Windows builds enter a supported Visual Studio 2019/2022 x64 developer environment and use CMake + Ninja. This intentionally avoids reliance on Visual Studio instance registration while preserving MSVC ABI/toolchain behavior.
+
+Build dependencies live only under ignored `.deps/`. iPlug2 is exact-SHA pinned; the nested Steinberg VST3 SDK is exact-SHA pinned and restores only build-required submodules (`base`, `cmake`, `pluginterfaces`, `public.sdk`) during normal bootstrap. Dirty or wrong-origin dependency trees are rejected instead of reset silently.
+
+`THREAT_MODEL.md` is the project security source for runtime/file/dependency trust boundaries. The aggregate `scripts/verify.ps1` combines working-tree secret scan, Python contract tests, Debug/Release native tests and repository/context integrity checks.

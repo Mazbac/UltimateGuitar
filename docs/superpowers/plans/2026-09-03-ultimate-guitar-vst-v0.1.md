@@ -66,15 +66,15 @@
 - Produces: `IPLUG2_DIR=<repo>/.deps/iPlug2`; VST3 SDK at `.deps/iPlug2/Dependencies/IPlug/VST3_SDK`; CMake target `UltimateGuitarCoreTests`; aggregate `scripts/verify.ps1`.
 - Pins: iPlug2 `d54f69050f517e43b941d88c2a170f0a840b9ee4`; VST3 SDK `3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96`.
 
-- [ ] **Step 1: Make the local Windows toolchain bootstrap autonomous**
+- [x] **Step 1: Make the local Windows toolchain bootstrap autonomous**
 
-`scripts/bootstrap-toolchain.ps1` first locates Visual Studio 2022 Build Tools/Community through `vswhere.exe` and confirms MSVC x64, a Windows SDK and CMake are present. If absent, download Microsoft's official VS 2022 Build Tools bootstrapper from `https://aka.ms/vs/17/release/vs_BuildTools.exe` and invoke it with `--quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.CMake.Project --includeRecommended`. After installation, resolve the developer environment through `VsDevCmd.bat -arch=x64`. If Windows requires a UAC consent that automation cannot cross, stop with that single explicit authorization blocker; do not ask the user to select workloads manually.
+`scripts/bootstrap-toolchain.ps1` first locates a supported Visual Studio 2019 or 2022 Build Tools/Community installation and confirms MSVC x64, a Windows 10+ SDK and CMake >=3.14 are present. Prefer an already-installed supported toolchain; on the current development machine VS2019 Build Tools at `C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools` provides MSVC 14.29, Windows SDK 10.0.19041.0 and CMake 3.20. If no supported installation exists, download Microsoft's official VS 2022 Build Tools bootstrapper from `https://aka.ms/vs/17/release/vs_BuildTools.exe` and invoke it with `--quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.CMake.Project --includeRecommended`. Resolve the chosen developer environment through its `VsDevCmd.bat -arch=x64`. If Windows requires a UAC consent that automation cannot cross, stop with that single explicit authorization blocker; do not ask the user to select workloads manually.
 
-- [ ] **Step 2: Write bootstrap dependency assertions before cloning anything**
+- [x] **Step 2: Write bootstrap dependency assertions before cloning anything**
 
 Create `cmake/UltimateGuitarDependencies.cmake` so configure fails unless `${IPLUG2_DIR}/iPlug2.cmake` and `${IPLUG2_DIR}/Dependencies/IPlug/VST3_SDK/public.sdk` exist. The error must name `scripts/bootstrap.ps1` as the recovery command.
 
-- [ ] **Step 3: Implement the idempotent pinned dependency bootstrap**
+- [x] **Step 3: Implement the idempotent pinned dependency bootstrap**
 
 `scripts/bootstrap.ps1` must clone iPlug2 into `.deps/iPlug2`, checkout the exact iPlug2 SHA, clone VST3 SDK recursively into `Dependencies/IPlug/VST3_SDK`, checkout the exact VST3 SHA, and reject dirty dependency trees instead of resetting user edits silently.
 
@@ -84,32 +84,32 @@ $vst3Sha  = '3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96'
 # clone when absent; otherwise verify origin, cleanliness and exact HEAD
 ```
 
-- [ ] **Step 4: Create the minimal CMake/test skeleton and verify failure before sources exist**
+- [x] **Step 4: Create the minimal CMake/test skeleton and verify failure before sources exist**
 
-Configure with `cmake -S . -B build -A x64 -DIPLUG2_DIR="$PWD/.deps/iPlug2"`; expected first failure is missing planned test source, proving the configure path reaches project-owned targets.
-- [ ] **Step 5: Activate manifest/project lifecycle with exact commands**
+Configure through the detected x64 `VsDevCmd.bat` environment with the Ninja generator and `-DIPLUG2_DIR=<repo>/.deps/iPlug2`; the dependency guard is contract-tested to fail with an actionable `scripts/bootstrap.ps1` recovery message when dependencies are absent.
+- [x] **Step 5: Activate manifest/project lifecycle with exact commands**
 
 Set manifest to `mode: project`, lifecycle `DEFINE`, stack `C++17 + iPlug2/VST3`, runtime `Windows x64 native`, package manager `git-pinned source dependencies`, database `none`; set build/unit/integration/verify commands to the PowerShell/CMake commands created in this task. Mark web-only fields such as Playwright/devUrl explicitly not applicable.
 
-- [ ] **Step 6: Create the durable design source before broad UI work**
+- [x] **Step 6: Create the durable design source before broad UI work**
 
 `DESIGN_SYSTEM.md` must define Ferrari-red hero surfaces, black hardware/fretboard surfaces, angular asymmetric geometry, restrained metallic highlights, compact studio density, original angular-guitar motif, no Jackson marks/copied photography, and control-state/accessibility rules. Mirror numeric/color tokens in `src/ui/DesignTokens.h` rather than scattering literals later.
 
-- [ ] **Step 7: Create the concrete threat model and working-tree secret gate**
+- [x] **Step 7: Create the concrete threat model and working-tree secret gate**
 
 `THREAT_MODEL.md` records assets (raw recordings, installed sample bank, plugin/DAW stability, settings), entry points (MIDI, host state chunks, manifest TSV, WAV bytes, user-selected paths, build dependencies), and abuse/failure cases (path traversal, malformed RIFF sizes, corrupt/hash-mismatched audio, dependency drift, oversized allocations, worker teardown races). Runtime has no network or credentials. Mitigations are strict manifest/path/WAV validation, pinned dependencies, elevation only for the FL Studio-required machine VST/content install while runtime remains unprivileged, immutable loaded data and no untrusted execution.
 
 `scripts/secret-scan.ps1` obtains tracked files plus `git ls-files --others --exclude-standard`, excludes `.deps/`, `build/` and binary extensions, and fails on PEM private-key headers, `AKIA[0-9A-Z]{16}`, `gh[pousr]_[A-Za-z0-9_]{36,}` or `sk-[A-Za-z0-9_-]{20,}`. It reports only file + pattern class, never the matched secret value.
 
-- [ ] **Step 8: Add clean Windows CI**
+- [x] **Step 8: Add clean Windows CI**
 
 `.github/workflows/quality.yml` runs on PR/push with `contents: read`, checks out full SHA-pinned actions, uses CMake/MSVC available on `windows-2025`, runs bootstrap, configure, build, CTest, Python unittest, repository validation/context integrity and secret scan; it uses only the already pinned `actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803` and `actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38`, then leaves build status as the gate; release artifacts are produced by the separately verified packaging path.
 
-- [ ] **Step 9: Run activation gates**
+- [x] **Step 9: Run activation gates**
 
 Run `node .automation/context-pack.mjs --scope all`, read through the completion marker, then run `node .automation/validate.mjs`, `node .automation/context-integrity.mjs`, `node .automation/context-pack.mjs --check` and `node .automation/self-test.mjs`. Expected: all PASS with lifecycle `DEFINE`.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add .project CMakeLists.txt cmake scripts .github DESIGN_SYSTEM.md THREAT_MODEL.md src/ui/DesignTokens.h STATUS.md PLAN.md ARCHITECTURE.md DECISIONS.md .gitignore
@@ -555,7 +555,7 @@ if($LASTEXITCODE -ne 0){ throw 'VST3 validator failed' }
 ```
 - [ ] **Step 4: Install the exact candidate and make FL Studio discover it**
 
-Run the produced `UltimateGuitar-0.1.0-win64.exe` as the current user. Through Desktop Commander/native UI automation, launch FL Studio, open Manage plugins, run a verified scan, and confirm one `UltimateGuitar` VST3 entry resolves from the per-user VST3 path. Do not ask the user to click or relay logs.
+Run the produced `UltimateGuitar-0.1.0-win64.exe` as the current user. Through Desktop Commander/native UI automation, launch FL Studio, open Manage plugins, run a verified scan, and confirm one `UltimateGuitar` VST3 entry resolves from the system `C:\Program Files\Common Files\VST3` path used by the installer. Do not ask the user to click or relay logs.
 
 - [ ] **Step 5: Exercise the golden playback journey in FL Studio**
 

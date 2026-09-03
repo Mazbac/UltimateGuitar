@@ -1,32 +1,33 @@
 # Current State
 
-- Lifecycle: TEMPLATE
+- Lifecycle: DEFINE
 - Foundation status: READY
 - Manifest schema: v3
-- Project discovery: COMPLETE for v0.1 native palm-mute VST direction
-- Written design: `docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md`
-- Design review: APPROVED by user on 2026-09-04
+- Project discovery/design: COMPLETE and user-approved for v0.1
 - Implementation plan: `docs/superpowers/plans/2026-09-03-ultimate-guitar-vst-v0.1.md`
-- Planning review: COMPLETE; no implementation has started
-- Project activation: NEXT; begins at implementation Task 1
-- Working branch: `product/v0.1-design`
-- Draft design PR: #1 (`product/v0.1-design` -> `main`)
-- Independent PR CI: GREEN — Template Integrity run `33808806395` on design commit `87bb7e61f77375479038d3f784159dae21cbdf10`
+- Working branch: `build/v0.1-implementation`
+- Isolated worktree: `.worktrees/v0.1-implementation`
+- Task 1: LOCALLY COMPLETE — project activation/native reproducible build; independent branch CI pending push
+- Next implementation slice: Task 2 — deterministic sample-library scanner and stable manifest
+- Design source: `DESIGN_SYSTEM.md`
+- Threat model: `THREAT_MODEL.md`
 
 ## Verified live evidence
-- Desktop Commander connected to the user's Windows machine.
-- Local project clone exists at `C:\Users\Alihan & Maaike\Documents\UltimateGuitar`.
-- Template validator, context integrity and context-pack freshness are green for the current discovery state.
-- GitHub has no open pull request for this repository at the start of this slice.
-- Real sample source located at `C:\Users\Alihan & Maaike\Music\UltimateGuitar\00_RAW_Recordings\Palm Mutes\Down Stroke`.
-- Current bank contains 1,655 WAVs / about 0.504 GiB; all inspected files are stereo 48 kHz 32-bit IEEE-float WAVs.
-- Canonical mapping verified from current SFZ/report and folders: S1 MIDI 11-23, S2 28-40, S3 45-57, S4 62-74.
-- Incomplete pools verified: Left S1 D#=15; Right S1 E=11; Right S2 F=15; Right S3 G#=14.
+- Desktop Commander is connected to the user's Windows machine.
+- Existing Visual Studio 2019 Build Tools provides MSVC 19.29 x64, Windows SDK 10.0.19041.0, CMake 3.20 and Ninja.
+- Ninja inside `VsDevCmd.bat -arch=x64` configures/builds the native C++ test target without compiler warnings.
+- iPlug2 is pinned to `d54f69050f517e43b941d88c2a170f0a840b9ee4`.
+- Steinberg VST3 SDK is pinned to `3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96`.
+- Minimal required VST3 submodules are restored without the unrelated documentation/tutorial checkout that hit Windows MAX_PATH.
+- Task 1 TDD: 11 Python activation/regression tests pass, including exact pin restore, actionable dependency recovery, secret-scan behavior, CI/action pinning and warning-free fresh Release build.
+- Native Debug and Release CTest both pass.
+- Aggregate `scripts/verify.ps1 -SkipReleaseChecks` passes secret scan, tests, Debug/Release builds, repository validator, context integrity/freshness and every positive/negative canary.
+- Real sample source remains external to Git at the previously verified Palm Mutes / Down Stroke location; 1,655 WAVs are not copied into this repository.
 
 ## Current priority
-Execute the approved implementation plan beginning with Task 1: activate project mode, bootstrap/verify the Windows toolchain, pin iPlug2/VST3 dependencies, create the design/threat-model sources and establish clean Windows CI.
+Commit and push the verified Task 1 activation slice, confirm independent GitHub Actions quality evidence, then begin Task 2 test-first against synthetic fixtures and the real 1,655-WAV bank.
 
 ## Known blockers
-- No product blocker.
-- Local CMake/MSVC build tools were not found on PATH during discovery; implementation must either locate an existing Visual Studio installation or install/configure the required free Windows C++ toolchain autonomously where authorization permits.
-- Public distribution under the internal name `UltimateGuitar` is not part of v0.1; public naming/trademark review is required before external release.
+- No local Task 1 blocker.
+- Independent Windows CI for the implementation branch is not evidence until the verified commit is pushed and its workflow completes.
+- Public distribution under the internal name `UltimateGuitar` remains outside v0.1 until naming/trademark review.

@@ -1,7 +1,7 @@
 # Project Definition
 
 ## Status
-Discovery and written v0.1 design are approved. The implementation plan is complete; repository activation is the first execution task.
+Discovery and written v0.1 design are approved. The repository is activated at lifecycle DEFINE with a verified Windows build foundation; the sample-library scanner is the next implementation slice.
 
 ## Product intent
 - Problem: the current Sforzando/SFZ prototype can mis-handle string/sample pools and may produce silent repeated notes; the user needs a dependable native guitar instrument.

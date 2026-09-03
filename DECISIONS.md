@@ -98,3 +98,13 @@ Reason: the current single articulation is already about 0.5 GiB and future arti
 Status: accepted
 Decision: Load/decode the validated bank off the audio thread into a process-wide immutable cache shared by plugin instances. Palm mutes remain one-shot and note-off does not choke them.
 Reason: the current bank is manageable in memory once, while two normal Left/Right instances should not duplicate roughly 0.5 GiB each. This is simpler and safer than introducing disk streaming in the first release.
+
+## D-020 — Use MSVC through VsDevCmd + Ninja for reproducible local Windows builds
+Status: accepted
+Decision: Detect supported Visual Studio 2019/2022 C++ installations, enter their x64 developer environment with `VsDevCmd.bat`, and configure the project with Ninja rather than depending on CMake's Visual Studio instance registry.
+Reason: the user's existing VS2019 Build Tools has a complete MSVC/SDK/CMake/Ninja toolchain but is not visible to CMake's Visual Studio generator. Ninja inside VsDevCmd is verified to compile successfully and is also compatible with iPlug2's CMake workflow.
+
+## D-021 — Restore only build-required VST3 SDK submodules during normal bootstrap
+Status: accepted
+Decision: Pin the VST3 SDK superproject and restore `base`, `cmake`, `pluginterfaces` and `public.sdk`; do not recursively checkout unrelated documentation/tutorial/VSTGUI submodules for the plugin build.
+Reason: the full recursive SDK checkout pulls the `doc` submodule and hit Windows MAX_PATH, while the selected build-required submodules are sufficient for the project-owned VST3 build path. The validator may add only the dependencies it actually needs when verified later.
