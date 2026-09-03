@@ -1,7 +1,7 @@
 # Project Definition
 
 ## Status
-Discovery complete for the first native VST slice. Repository activation remains intentionally pending until the written v0.1 design spec is reviewed.
+Discovery and written v0.1 design are approved. The implementation plan is complete; repository activation is the first execution task.
 
 ## Product intent
 - Problem: the current Sforzando/SFZ prototype can mis-handle string/sample pools and may produce silent repeated notes; the user needs a dependable native guitar instrument.
@@ -13,14 +13,14 @@ Discovery complete for the first native VST slice. Repository activation remains
 ## Product experience
 - Target audience / expertise: DAW user; should not need developer tooling or SFZ knowledge.
 - First useful outcome: VST3 loads in FL Studio, reports sample library Ready, then all mapped notes play immediately and reliably.
-- Distribution/install expectations: normal per-user Windows install without requiring administrator access where avoidable; VST3 plus versioned sample content.
+- Distribution/install expectations: normal Windows installer; one-time UAC elevation is accepted because FL Studio requires VST3 in its documented Program Files scan location. Versioned sample content is installed as shared read-only product data; user settings remain per-user.
 - Setup/onboarding constraints: automatic sample discovery is primary; a single Locate Sample Library recovery action exists when discovery fails.
 - Update/recovery/uninstall expectations: versioned sample bank and settings must be recoverable; uninstall must not leave unexplained runtime artifacts.
 
 ## Brand / creative input
 - Existing brand/assets: internal project/repository name `UltimateGuitar`; no public release identity approved.
-- Colors/typography/tone: not yet a finalized design system; initial direction is compact, dark-neutral and studio-oriented.
-- User references/inspiration: existing FL Studio/Sforzando workflow and the user's real Left/Right guitar recordings.
+- Colors/typography/tone: aggressive Ferrari-red + black metal-instrument direction with sharp asymmetric geometry and restrained metallic highlights; exact tokens/typography are finalized in DESIGN.
+- User references/inspiration: Jackson JS32T Warrior Ferrari Red for visual energy/geometry only, plus the existing FL Studio/Sforzando workflow and the user's real Left/Right guitar recordings; no Jackson logos or literal copied product design.
 - Explicit durable likes/dislikes: strict no-string-mixing; natural variation; no randomly silent notes; keep the workflow simple inside FL Studio.
 
 ## Constraints

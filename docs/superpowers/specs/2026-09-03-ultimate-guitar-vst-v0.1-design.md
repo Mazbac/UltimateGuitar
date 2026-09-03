@@ -1,7 +1,7 @@
 # UltimateGuitar VST v0.1 Design
 
 Date: 2026-09-03
-Status: approved direction, written-spec review pending
+Status: APPROVED by user on 2026-09-04
 Target: Windows x64 VST3 instrument, FL Studio first
 
 ## Product goal
@@ -109,6 +109,11 @@ This directly fixes the Sforzando-era failure mode where a fixed 16-position seq
 
 Default human timing range is 0 to +0.8 ms. The UI `Humanize` control scales that maximum from 0% to 100%. The random sequence is deterministic from saved plugin state so project reloads and offline renders are reproducible.
 
+## Visual direction
+The interface must carry the aggressive, instantly recognizable visual energy the user likes in the Jackson JS32T Warrior Ferrari Red: saturated Ferrari-red hero surfaces, black hardware-like details, sharp asymmetric/angular geometry, thin metallic highlights and dark fretboard-like secondary surfaces. This is visual inspiration only: do not use Jackson branding, logos, copied product photography, or a literal traced Warrior body. UltimateGuitar must have its own product identity.
+
+Avoid a generic black plugin with a few red knobs. The composition should feel intentionally guitar-shaped/metal-oriented, with a prominent `UltimateGuitar` wordmark treatment and a stylized original angular-guitar motif. Exact tokens/components are defined later in the tracked `DESIGN_SYSTEM.md` before broad UI implementation.
+
 ## User experience
 The v0.1 editor is a compact studio-tool surface, not a sample-manager UI. It shows:
 - Instrument/articulation identity: `Palm Mute / Downstroke / Middle`.
@@ -122,12 +127,12 @@ Source WAV panning is preserved. v0.1 does not hard-pan a Left-bank instance or 
 
 If the installed sample library is missing or incompatible, the plugin shows one actionable recovery surface with `Locate Sample Library`. Technical paths/errors may be available in diagnostics, but raw stack traces or framework errors are not primary UI copy.
 
-The UI should be resizable/HiDPI-safe and keyboard-operable where controls permit it. Broad visual styling waits for the project DESIGN phase and its dedicated design-system source; the v0.1 product direction is dark-neutral, compact and studio-oriented rather than skeuomorphic or decorative.
+The UI should be resizable/HiDPI-safe and keyboard-operable where controls permit it. The project DESIGN phase converts the Ferrari-red/angular direction above into a tracked design system before broad styling; controls remain compact and studio-oriented rather than becoming decorative clutter.
 
 ## Sample distribution and repository policy
 Raw recordings remain outside ordinary Git history. The repository stores code, metadata schema, generated sample manifests/reports, tests and tiny synthetic WAV fixtures only.
 
-Developer builds may resolve the real sample bank through a documented local path override. Release packaging installs the versioned sample bank into a per-user application-data location and the plugin resolves it automatically. A user-selected alternate library root is stored in plugin/user settings.
+Developer builds may resolve the real sample bank through a documented local path override. Release packaging installs the versioned read-only sample bank into `%PROGRAMDATA%\UltimateGuitar\Samples\v0.1` and the plugin resolves it automatically. This accompanies the FL Studio-compatible system VST3 install under `Program Files\Common Files\VST3`; a user-selected alternate library root is stored separately in per-user settings.
 
 The release path must not depend on the original `00_RAW_Recordings` folder names being present on another machine. Packaging creates a stable product-owned sample layout from the validated source library.
 

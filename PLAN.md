@@ -9,9 +9,11 @@
 - [x] Compare native VST implementation approaches and select iPlug2 + VST3 direction.
 - [x] Define v0.1 scope, non-goals, real-time boundaries, variation rules and release acceptance.
 - [x] Write `docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md`.
-- [ ] User review/approval of the written spec.
+- [x] User review/approval of the written spec (approved 2026-09-04).
 
 ## After written-spec approval
+- [x] Write the detailed v0.1 implementation plan.
+
 1. Invoke the writing-plans workflow and produce the detailed implementation plan.
 2. Activate `.project/manifest.json` from template to project mode at lifecycle DEFINE with exact commands and project metadata.
 3. Pin the iPlug2/VST3 dependency revisions and establish a reproducible Windows x64 CMake build plus GitHub Actions CI.

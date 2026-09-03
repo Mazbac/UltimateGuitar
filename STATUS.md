@@ -5,8 +5,10 @@
 - Manifest schema: v3
 - Project discovery: COMPLETE for v0.1 native palm-mute VST direction
 - Written design: `docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md`
-- Design review: PENDING user review of written spec
-- Project activation: NOT STARTED; intentionally blocked on written-spec approval
+- Design review: APPROVED by user on 2026-09-04
+- Implementation plan: `docs/superpowers/plans/2026-09-03-ultimate-guitar-vst-v0.1.md`
+- Planning review: COMPLETE; no implementation has started
+- Project activation: NEXT; begins at implementation Task 1
 - Working branch: `product/v0.1-design`
 - Draft design PR: #1 (`product/v0.1-design` -> `main`)
 - Independent PR CI: GREEN — Template Integrity run `33808806395` on design commit `87bb7e61f77375479038d3f784159dae21cbdf10`
@@ -22,7 +24,7 @@
 - Incomplete pools verified: Left S1 D#=15; Right S1 E=11; Right S2 F=15; Right S3 G#=14.
 
 ## Current priority
-Get written-spec approval. Then use the writing-plans workflow, activate the repository as a concrete project, establish the pinned iPlug2/VST3 Windows toolchain and CI, and implement the first vertical slice test-first.
+Execute the approved implementation plan beginning with Task 1: activate project mode, bootstrap/verify the Windows toolchain, pin iPlug2/VST3 dependencies, create the design/threat-model sources and establish clean Windows CI.
 
 ## Known blockers
 - No product blocker.

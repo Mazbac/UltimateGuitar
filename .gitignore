@@ -21,3 +21,6 @@ coverage/
 .tmp/
 tmp/
 .cache/
+
+# Isolated implementation worktrees
+.worktrees/
