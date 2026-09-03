@@ -8,6 +8,8 @@
 - Design review: PENDING user review of written spec
 - Project activation: NOT STARTED; intentionally blocked on written-spec approval
 - Working branch: `product/v0.1-design`
+- Draft design PR: #1 (`product/v0.1-design` -> `main`)
+- Independent PR CI: GREEN — Template Integrity run `33808806395` on design commit `87bb7e61f77375479038d3f784159dae21cbdf10`
 
 ## Verified live evidence
 - Desktop Commander connected to the user's Windows machine.
