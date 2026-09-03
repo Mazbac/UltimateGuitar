@@ -8,7 +8,7 @@
 - Working branch: `build/v0.1-implementation`
 - Isolated worktree: `.worktrees/v0.1-implementation`
 - Task 1: COMPLETE — project activation/native reproducible build independently verified on commit `91e177644921c0b0b22116985491f13eea3d33c0`
-- Task 2: LOCALLY COMPLETE — deterministic scanner/stable manifest; independent branch CI pending push
+- Task 2: COMPLETE — deterministic scanner/stable manifest independently verified on commit `3dd4f74bc6f45dbd0ae5ba4728ea77e42b23dafe`
 - Next implementation slice: Task 3 — canonical MIDI mapping and runtime manifest pools
 - Design source: `DESIGN_SYSTEM.md`
 - Threat model: `THREAT_MODEL.md`
@@ -27,9 +27,10 @@
 - Real sample source remains external to Git. A fresh 2026-09-04 scanner audit independently counts 1,660 WAVs across all 104 side/note pools; none are copied into this repository.
 - Task 2 scanner suite: 14 focused tests pass directly and via Debug/Release CTest; full local `scripts/verify.ps1 -SkipReleaseChecks` passes with 27 Python tests total.
 - Fresh real-bank manifest SHA-256: `72c68f33ce3a195051075dafa868ce988b6b2a9e8264ec480107aca093f618a1`; remaining holes are Left S1 MIDI15 take 4, Right S2 MIDI29 take 8, Right S3 MIDI56 takes 4/5.
+- GitHub Actions on `3dd4f74bc6f45dbd0ae5ba4728ea77e42b23dafe`: `Quality` run 33818702081 = success and `Template Integrity` run 33818702229 = success.
 
 ## Current priority
-Commit/push the verified Task 2 scanner slice, confirm independent GitHub Actions, then begin Task 3 test-first.
+Begin Task 3 test-first: canonical MIDI mapping and strict runtime manifest pools.
 
 ## Known blockers
 - No local Task 1 or Task 2 implementation blocker.
