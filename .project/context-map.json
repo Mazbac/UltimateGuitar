@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "always": [
+    "AGENTS.md",
+    ".project/manifest.json",
+    "PROJECT.md",
+    "STATUS.md",
+    "PLAN.md",
+    "DECISIONS.md",
+    "RISKS.md",
+    "ARCHITECTURE.md",
+    "docs/CONTEXT_INTEGRITY.md",
+    ".project/context-map.json",
+    "docs/CONTEXT_RESOLUTION.md",
+    "docs/DEFINITION_OF_DONE.md",
+    "docs/TOOL_POLICY.md"
+  ],
+  "lifecycle": {
+    "TEMPLATE": [
+      "START_HERE.md",
+      "docs/PRODUCT_DISCOVERY.md",
+      "docs/PROJECT_ACTIVATION.md"
+    ],
+    "DISCOVER": [
+      "docs/PRODUCT_DISCOVERY.md"
+    ],
+    "DEFINE": [
+      "docs/SECURITY_STANDARD.md",
+      "docs/PRODUCT_EXPERIENCE_STANDARD.md"
+    ],
+    "DESIGN": [
+      "docs/DESIGN_STANDARD.md",
+      "docs/PRODUCT_EXPERIENCE_STANDARD.md",
+      "docs/TEST_STRATEGY.md",
+      "docs/DESIGN_SYSTEM_TEMPLATE.md"
+    ],
+    "BUILD": [
+      "docs/SDLC.md",
+      "docs/TEST_STRATEGY.md",
+      "docs/SECURITY_STANDARD.md"
+    ],
+    "VERIFY": [
+      "docs/DEFINITION_OF_DONE.md",
+      "docs/TEST_STRATEGY.md",
+      "docs/PRODUCT_EXPERIENCE_STANDARD.md",
+      "docs/QUALITY_EVIDENCE_TEMPLATE.md"
+    ],
+    "RELEASE_CANDIDATE": [
+      "docs/DEFINITION_OF_DONE.md",
+      "docs/RELEASE_AND_RECOVERY.md",
+      "docs/QUALITY_EVIDENCE_TEMPLATE.md"
+    ],
+    "RELEASED": [
+      "docs/RELEASE_AND_RECOVERY.md"
+    ],
+    "OPERATE": [
+      "docs/SDLC.md",
+      "docs/RELEASE_AND_RECOVERY.md"
+    ]
+  },
+  "scopes": {
+    "all": [
+      "docs/PRODUCT_DISCOVERY.md",
+      "docs/PROJECT_ACTIVATION.md",
+      "docs/SDLC.md",
+      "docs/DESIGN_STANDARD.md",
+      "docs/PRODUCT_EXPERIENCE_STANDARD.md",
+      "docs/SECURITY_STANDARD.md",
+      "docs/TEST_STRATEGY.md",
+      "docs/DEFINITION_OF_DONE.md",
+      "docs/TOOL_POLICY.md",
+      "docs/RELEASE_AND_RECOVERY.md",
+      "docs/QUALITY_EVIDENCE_TEMPLATE.md",
+      "docs/DESIGN_SYSTEM_TEMPLATE.md"
+    ],
+    "architecture": [
+      "ARCHITECTURE.md",
+      "DECISIONS.md",
+      "docs/SDLC.md"
+    ],
+    "design": [
+      "docs/DESIGN_STANDARD.md",
+      "docs/PRODUCT_EXPERIENCE_STANDARD.md",
+      "docs/TEST_STRATEGY.md",
+      "docs/DESIGN_SYSTEM_TEMPLATE.md"
+    ],
+    "ui": [
+      "docs/DESIGN_STANDARD.md",
+      "docs/PRODUCT_EXPERIENCE_STANDARD.md",
+      "docs/TEST_STRATEGY.md",
+      "docs/DESIGN_SYSTEM_TEMPLATE.md"
+    ],
+    "experience": [
+      "docs/PRODUCT_EXPERIENCE_STANDARD.md",
+      "docs/DEFINITION_OF_DONE.md"
+    ],
+    "security": [
+      "docs/SECURITY_STANDARD.md",
+      "RISKS.md"
+    ],
+    "testing": [
+      "docs/TEST_STRATEGY.md",
+      "docs/DEFINITION_OF_DONE.md"
+    ],
+    "release": [
+      "docs/RELEASE_AND_RECOVERY.md",
+      "docs/DEFINITION_OF_DONE.md",
+      "STATUS.md"
+    ],
+    "migration": [
+      "ARCHITECTURE.md",
+      "RISKS.md",
+      "docs/RELEASE_AND_RECOVERY.md",
+      "docs/TEST_STRATEGY.md"
+    ]
+  },
+  "manifestReferences": [
+    "ui.designSystem",
+    "ui.designTokens",
+    "quality.evidence",
+    "quality.definitionOfDone"
+  ],
+  "rules": {
+    "materialWorkRequiresPack": true,
+    "unknownScopeFallsBackToAll": true,
+    "requireCompletionMarker": true
+  }
+}

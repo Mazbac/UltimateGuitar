@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 1
+if ! node "$repo_root/.automation/context-pack.mjs" --check >/dev/null 2>&1; then
+  echo "Push blocked: deterministic context pack is missing or stale." >&2
+  echo "Generate the full context pack (default/all), read it through its completion marker, then retry." >&2
+  exit 1
+fi
+
+while read local_ref local_sha remote_ref remote_sha
+do
+  case "$remote_ref" in
+    refs/heads/main|refs/heads/master)
+      echo "Direct push to protected default branch blocked by repository policy." >&2
+      echo "Push a feature branch and merge through a pull request after CI is green." >&2
+      exit 1
+      ;;
+  esac
+done
+
+exit 0

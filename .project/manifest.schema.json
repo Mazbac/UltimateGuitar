@@ -1,0 +1,410 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Autonomous Project Manifest",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "mode",
+    "lifecycle",
+    "project",
+    "context",
+    "stack",
+    "commands",
+    "ui",
+    "experience",
+    "quality",
+    "release"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schemaVersion": {
+      "const": 3
+    },
+    "mode": {
+      "enum": [
+        "template",
+        "project"
+      ]
+    },
+    "lifecycle": {
+      "enum": [
+        "TEMPLATE",
+        "DISCOVER",
+        "DEFINE",
+        "DESIGN",
+        "BUILD",
+        "VERIFY",
+        "RELEASE_CANDIDATE",
+        "RELEASED",
+        "OPERATE"
+      ]
+    },
+    "project": {
+      "type": "object",
+      "required": [
+        "name",
+        "summary",
+        "appType",
+        "primaryUsers",
+        "firstRelease"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "appType": {
+          "type": "string",
+          "minLength": 1
+        },
+        "primaryUsers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "firstRelease": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "required": [
+        "invariant",
+        "sourceOfTruth",
+        "requireReconciliation",
+        "resumeSources",
+        "contextMap",
+        "contextPackCommand"
+      ],
+      "properties": {
+        "invariant": {
+          "const": "session-invariance"
+        },
+        "sourceOfTruth": {
+          "const": "repository"
+        },
+        "requireReconciliation": {
+          "const": true
+        },
+        "resumeSources": {
+          "type": "array",
+          "minItems": 7,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "contextMap": {
+          "const": ".project/context-map.json"
+        },
+        "contextPackCommand": {
+          "const": "node .automation/context-pack.mjs"
+        }
+      },
+      "additionalProperties": false
+    },
+    "stack": {
+      "type": "object",
+      "required": [
+        "primary",
+        "runtime",
+        "packageManager",
+        "database"
+      ],
+      "properties": {
+        "primary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runtime": {
+          "type": "string",
+          "minLength": 1
+        },
+        "packageManager": {
+          "type": "string",
+          "minLength": 1
+        },
+        "database": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "commands": {
+      "type": "object",
+      "required": [
+        "bootstrap",
+        "dev",
+        "format",
+        "lint",
+        "typecheck",
+        "unit",
+        "integration",
+        "e2e",
+        "build",
+        "verify"
+      ],
+      "properties": {
+        "bootstrap": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dev": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lint": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "typecheck": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "integration": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "e2e": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "build": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verify": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "ui": {
+      "type": "object",
+      "required": [
+        "hasUserInterface",
+        "kind",
+        "platform",
+        "devUrl",
+        "playwright",
+        "designSystem",
+        "designTokens",
+        "componentStrategy",
+        "accessibilityTarget",
+        "visualRegression"
+      ],
+      "properties": {
+        "hasUserInterface": {
+          "type": "boolean"
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platform": {
+          "type": "string",
+          "minLength": 1
+        },
+        "devUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "playwright": {
+          "type": "boolean"
+        },
+        "designSystem": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "designTokens": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "componentStrategy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accessibilityTarget": {
+          "type": "string",
+          "minLength": 1
+        },
+        "visualRegression": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "experience": {
+      "type": "object",
+      "required": [
+        "audience",
+        "installer",
+        "onboarding",
+        "updater",
+        "recovery",
+        "reset",
+        "uninstaller",
+        "goldenJourneys"
+      ],
+      "properties": {
+        "audience": {
+          "type": "string",
+          "minLength": 1
+        },
+        "installer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "onboarding": {
+          "type": "string",
+          "minLength": 1
+        },
+        "updater": {
+          "type": "string",
+          "minLength": 1
+        },
+        "recovery": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reset": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uninstaller": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goldenJourneys": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "quality": {
+      "type": "object",
+      "required": [
+        "definitionOfDone",
+        "requireCleanInstall",
+        "requireSecurityReview",
+        "requireAccessibilityReviewForUI",
+        "requireVisualReviewForUI",
+        "requireProfessionalExperienceReview",
+        "requireContextIntegrity",
+        "evidence",
+        "requireChallengerReview"
+      ],
+      "properties": {
+        "definitionOfDone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requireCleanInstall": {
+          "const": true
+        },
+        "requireSecurityReview": {
+          "const": true
+        },
+        "requireAccessibilityReviewForUI": {
+          "const": true
+        },
+        "requireVisualReviewForUI": {
+          "const": true
+        },
+        "requireProfessionalExperienceReview": {
+          "const": true
+        },
+        "requireContextIntegrity": {
+          "const": true
+        },
+        "evidence": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requireChallengerReview": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "release": {
+      "type": "object",
+      "required": [
+        "artifact",
+        "deployment",
+        "rollback"
+      ],
+      "properties": {
+        "artifact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deployment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rollback": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

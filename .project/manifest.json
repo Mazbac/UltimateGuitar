@@ -1,0 +1,85 @@
+{
+  "$schema": "./manifest.schema.json",
+  "schemaVersion": 3,
+  "mode": "template",
+  "lifecycle": "TEMPLATE",
+  "project": {
+    "name": "UNSET",
+    "summary": "UNSET",
+    "appType": "UNSET",
+    "primaryUsers": [],
+    "firstRelease": "UNSET"
+  },
+  "context": {
+    "invariant": "session-invariance",
+    "sourceOfTruth": "repository",
+    "requireReconciliation": true,
+    "resumeSources": [
+      ".project/manifest.json",
+      "PROJECT.md",
+      "STATUS.md",
+      "PLAN.md",
+      "DECISIONS.md",
+      "RISKS.md",
+      "ARCHITECTURE.md"
+    ],
+    "contextMap": ".project/context-map.json",
+    "contextPackCommand": "node .automation/context-pack.mjs"
+  },
+  "stack": {
+    "primary": "UNSET",
+    "runtime": "UNSET",
+    "packageManager": "UNSET",
+    "database": "UNSET"
+  },
+  "commands": {
+    "bootstrap": null,
+    "dev": null,
+    "format": null,
+    "lint": null,
+    "typecheck": null,
+    "unit": null,
+    "integration": null,
+    "e2e": null,
+    "build": null,
+    "verify": null
+  },
+  "ui": {
+    "hasUserInterface": false,
+    "kind": "UNSET",
+    "platform": "UNSET",
+    "devUrl": null,
+    "playwright": false,
+    "designSystem": null,
+    "designTokens": null,
+    "componentStrategy": "UNSET",
+    "accessibilityTarget": "UNSET",
+    "visualRegression": "UNSET"
+  },
+  "experience": {
+    "audience": "UNSET",
+    "installer": "UNSET",
+    "onboarding": "UNSET",
+    "updater": "UNSET",
+    "recovery": "UNSET",
+    "reset": "UNSET",
+    "uninstaller": "UNSET",
+    "goldenJourneys": []
+  },
+  "quality": {
+    "definitionOfDone": "docs/DEFINITION_OF_DONE.md",
+    "requireCleanInstall": true,
+    "requireSecurityReview": true,
+    "requireAccessibilityReviewForUI": true,
+    "requireVisualReviewForUI": true,
+    "requireProfessionalExperienceReview": true,
+    "requireContextIntegrity": true,
+    "evidence": null,
+    "requireChallengerReview": true
+  },
+  "release": {
+    "artifact": "UNSET",
+    "deployment": "UNSET",
+    "rollback": "UNSET"
+  }
+}

@@ -1,0 +1,23 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Test/browser artifacts
+playwright-report/
+test-results/
+.playwright-cli/
+coverage/
+
+# Temporary build/cache
+.tmp/
+tmp/
+.cache/
