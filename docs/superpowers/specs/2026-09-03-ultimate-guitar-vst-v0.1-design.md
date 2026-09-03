@@ -54,6 +54,13 @@ Verified on 2026-09-03:
 - Right / String 2 / F contains 15 takes; take 8 is absent.
 - Right / String 3 / G# contains 14 takes; takes 4 and 5 are absent.
 
+Live source update verified 2026-09-04:
+- The bank now contains 1,660 WAVs across all 104 expected side/note pools.
+- Right / String 1 / E has been repaired to a complete 16-take pool.
+- Remaining incomplete pools are Left / String 1 / D# = 15 (take 4 absent), Right / String 2 / F = 15 (take 8 absent), and Right / String 3 / G# = 14 (takes 4 and 5 absent).
+- Two legacy filenames omit the separator in `HighStroke`; the scanner accepts only this narrow spelling variant while preserving side/note/folder validation.
+- The historical 11-entry pool remains a synthetic regression case so fixed-16 assumptions cannot reappear.
+
 These incomplete pools are valid input, not runtime errors. The engine enumerates actual manifest entries and never assumes takes 1-16 all exist.
 
 ## Architecture choice
@@ -158,6 +165,6 @@ Release verification must include:
 - No host crash, dropped valid note, cross-string mapping or hidden sample-library failure.
 
 ## Acceptance criteria
-v0.1 is acceptable when a cleanly installed VST3 in FL Studio can play every mapped note from the correct string and selected side, repeatedly and rapidly, with no silent round-robin holes. The known 11/14/15-take pools must work continuously without special-case code per note.
+v0.1 is acceptable when a cleanly installed VST3 in FL Studio can play every mapped note from the correct string and selected side, repeatedly and rapidly, with no silent round-robin holes. Current 14/15-take pools and the historical 11-take regression case must work continuously without special-case code per note.
 
 A new session must be able to reconstruct the MIDI mapping, sample-pool rules, architecture and next engineering step from the repository without depending on this chat.

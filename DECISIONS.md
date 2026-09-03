@@ -87,7 +87,7 @@ Reason: this is the verified physical/sample-library structure and fixes prior a
 ## D-017 — Variation uses real available samples, never nominal take slots
 Status: accepted
 Decision: Each side+note has an independent shuffled bag built from manifest entries that actually exist. Missing/non-contiguous take numbers do not create placeholders or silence.
-Reason: the real library already contains valid 11/14/15-take pools; fixed 16-position assumptions caused the failure class the native plugin must eliminate.
+Reason: the design-time library contained valid 11/14/15-take pools, and the current bank still contains non-contiguous 14/15-take pools; fixed 16-position assumptions caused the failure class the native plugin must eliminate.
 
 ## D-018 — Raw sample audio stays out of ordinary Git history
 Status: accepted
@@ -113,3 +113,8 @@ Reason: the full recursive SDK checkout pulls the `doc` submodule and hit Window
 Status: accepted
 Decision: Extend toolchain discovery to Visual Studio 2026 (18/Enterprise, BuildTools and Community) while retaining verified VS2019/2022 compatibility.
 Reason: GitHub Actions windows-2025 now resolves to the VS2026 runner image, and independent CI proved the older 2019/2022-only probe rejected an otherwise valid C++ runner.
+
+## D-023 — Preserve narrow compatibility with two legacy `HighStroke` filenames
+Status: accepted
+Decision: The manifest scanner accepts the canonical `... High Stroke Middle.wav` form plus the exact legacy omission `... HighStroke Middle.wav`; all side, folder-note and take validation remains strict.
+Reason: the live 2026-09-04 bank contains exactly two otherwise-valid recordings with this separator typo. Renaming raw source files is unnecessary/destructive, while broad filename tolerance would weaken manifest integrity.

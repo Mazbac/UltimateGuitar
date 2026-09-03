@@ -39,3 +39,7 @@ Local and CI Windows builds enter a supported Visual Studio 2019/2022/2026 x64 d
 Build dependencies live only under ignored `.deps/`. iPlug2 is exact-SHA pinned; the nested Steinberg VST3 SDK is exact-SHA pinned and restores only build-required submodules (`base`, `cmake`, `pluginterfaces`, `public.sdk`) during normal bootstrap. Dirty or wrong-origin dependency trees are rejected instead of reset silently.
 
 `THREAT_MODEL.md` is the project security source for runtime/file/dependency trust boundaries. The aggregate `scripts/verify.ps1` combines working-tree secret scan, Python contract tests, Debug/Release native tests and repository/context integrity checks.
+## Sample-manifest tooling
+`tools/library_manifest.py` is the deterministic development/release boundary from raw recordings to runtime metadata. It maps explicit per-string folder labels to MIDI numbers, validates accepted WAVs as stereo 48 kHz IEEE-float32, hashes each file, and emits LF-normalized TSV rows sorted by side/string/MIDI/take. Missing take numbers are reported but never materialized as empty rows.
+
+A 2026-09-04 live scan validates 1,660 WAVs / 104 pools. Two legacy filenames use `HighStroke` without the normal separator; only that narrow variant is accepted, while side/folder/note matching stays strict. Synthetic fixtures exercise historical 11-entry and current non-contiguous pools without committing private recordings.

@@ -132,7 +132,7 @@ git commit -m "build: activate UltimateGuitar native VST project"
 - Produces `library-report.txt` with pool counts/missing nominal take numbers and format summary.
 - Exit code 0 only when every accepted file is stereo/48k/32-bit IEEE-float and maps to one canonical note.
 
-- [ ] **Step 1: Write failing Python tests for parsing and known incomplete pools**
+- [x] **Step 1: Write failing Python tests for parsing and known incomplete pools**
 
 ```python
 class ManifestTests(unittest.TestCase):
@@ -146,24 +146,24 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(parse_wav_filename('Right', 'E', 'R10 E Stroke Middle.wav'), 10)
 ```
 
-- [ ] **Step 2: Run the focused test and confirm RED**
+- [x] **Step 2: Run the focused test and confirm RED**
 
 Run: `python -m unittest tests.python.test_library_manifest -v`. Expected: import/function failures because `tools.library_manifest` does not exist.
 
-- [ ] **Step 3: Implement exact folder/note/take parsing plus RIFF format validation**
+- [x] **Step 3: Implement exact folder/note/take parsing plus RIFF format validation**
 
 Use only Python stdlib. Normalize folder labels case-insensitively, but map them through these explicit per-string tables rather than directory order: S1 `b starting note=11,c=12,c#=13,d=14,d#=15,e=16,f=17,f#=18,g=19,g#=20,a high=21,a# high=22,b high=23`; S2 `e starting note=28,f=29,f#=30,g=31,g#=32,a high=33,a# high=34,b high=35,c high=36,c# high=37,d high=38,d# high=39,e high=40`; S3 `a starting note=45,a#=46,b=47,c=48,c#=49,d=50,d#=51,e=52,f=53,f#=54,g=55,g#=56,a high=57`; S4 `d starting note=62,d#=63,e=64,f=65,f#=66,g=67,g#=68,a high=69,a# high=70,b high=71,c high=72,c# high=73,d high=74`.
 
-Accept filenames case-insensitively only when they match `^(L|R)([1-9][0-9]*) ([A-G](?:#)?)( High)? Stroke Middle\.wav$`; the L/R prefix must match the side folder, the note/high token must match the mapped folder, and the numeric take becomes the manifest take ID. `Starting Note` appears only in the folder and is intentionally absent from the WAV filename. Parse RIFF chunks directly so IEEE-float WAV format tag `3` is supported; reject mono, non-48k, non-32-bit, non-float or malformed files with path-specific errors.
-- [ ] **Step 4: Add deterministic manifest/report emission**
+Accept canonical filenames case-insensitively using the planned pattern; live audit also found exactly two legacy `HighStroke` separator typos, so accept that narrow `HighStroke` variant only when the side and note/high token still match the mapped folder. The L/R prefix must match the side folder and the numeric take becomes the manifest take ID. `Starting Note` appears only in the folder and is intentionally absent from the WAV filename. Parse RIFF chunks directly so IEEE-float WAV format tag `3` is supported; reject mono, non-48k, non-32-bit, non-float or malformed files with path-specific errors.
+- [x] **Step 4: Add deterministic manifest/report emission**
 
 Normalize relative paths with `/`, sort by `(side, string, midi, take)`, compute SHA-256 while scanning, and write UTF-8 with `\n` line endings. Duplicate `(side,string,midi,take)` entries are fatal; missing take numbers are warnings only.
 
-- [ ] **Step 5: Generate tiny synthetic float-WAV fixtures in the test itself**
+- [x] **Step 5: Generate tiny synthetic float-WAV fixtures in the test itself**
 
 The test helper writes a valid RIFF/WAVE format-tag-3 stereo 48k/32-bit file with known frame count; do not commit private recordings. Add invalid mono and invalid 44.1k fixtures to prove rejection.
 
-- [ ] **Step 6: Validate against the real local library**
+- [x] **Step 6: Validate against the real local library**
 
 Run:
 ```powershell
@@ -172,9 +172,9 @@ python tools/library_manifest.py `
   --manifest build/library/manifest.tsv `
   --report build/library/library-report.txt
 ```
-Expected: 1,655 rows and warnings exactly matching Left S1 D#=15, Right S1 E=11, Right S2 F=15, Right S3 G#=14; no fatal format/mapping errors.
+Current live expectation (re-audited 2026-09-04): 1,660 rows across 104 pools, with warnings exactly matching Left S1 D#=15, Right S2 F=15 and Right S3 G#=14; Right S1 E is now complete at 16 takes. No fatal format/mapping errors.
 
-- [ ] **Step 7: Run GREEN and commit**
+- [x] **Step 7: Run GREEN and commit**
 
 Run `python -m unittest tests.python.test_library_manifest -v` and `scripts/verify.ps1 -SkipNativeBuild` until PASS, then:
 ```bash
@@ -508,7 +508,7 @@ Use `SetCompressor /SOLID zlib` and `RequestExecutionLevel admin` because FL Stu
 
 Uninstaller removes only the installed `UltimateGuitar.vst3`, product-owned `%PROGRAMDATA%\UltimateGuitar\Samples\v0.1`, and its uninstaller. Per-user `%LOCALAPPDATA%\UltimateGuitar\settings.txt` is explicitly treated as user preference data and preserved across uninstall/reinstall; a future in-product reset may delete it deliberately. The uninstaller must never delete raw recordings or arbitrary alternate library folders. Remove now-empty machine-wide product directories only after child deletion succeeds.
 
-- [ ] **Step 6: Build a real local package from the 1,655-WAV library**
+- [ ] **Step 6: Build a real local package from the 1,660-WAV library**
 
 Run `tools/library_manifest.py` against the verified raw root, `tools/package_samples.py` into `build/package/Samples/v0.1`, copy `build/out/UltimateGuitar.vst3` into staging, then run NSIS to produce `build/release/UltimateGuitar-0.1.0-win64.exe`.
 
@@ -599,4 +599,4 @@ git commit -m "test: verify UltimateGuitar v0.1 release candidate"
 ---
 
 ## Plan completion contract
-Execution is complete only when Tasks 1-10 are checked, each task's tests passed before its commit, the real 1,655-WAV bank was validated/package-tested without entering Git, Steinberg Validator passes, FL Studio golden journeys pass, the installer lifecycle passes, repository/context/CI gates are green and current `QUALITY_EVIDENCE.md` has no unresolved release blocker.
+Execution is complete only when Tasks 1-10 are checked, each task's tests passed before its commit, the current real 1,660-WAV bank was validated/package-tested without entering Git, Steinberg Validator passes, FL Studio golden journeys pass, the installer lifecycle passes, repository/context/CI gates are green and current `QUALITY_EVIDENCE.md` has no unresolved release blocker.

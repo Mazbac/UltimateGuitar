@@ -12,6 +12,14 @@ endif()
 include(cmake/UltimateGuitarDependencies.cmake)
 
 enable_testing()
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+add_test(
+  NAME library-manifest-python
+  COMMAND ${Python3_EXECUTABLE} -m unittest tests.python.test_library_manifest -v
+)
+set_tests_properties(library-manifest-python PROPERTIES
+  WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+)
 add_executable(UltimateGuitarCoreTests
   tests/native/TestSmoke.cpp
 )

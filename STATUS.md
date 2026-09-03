@@ -7,8 +7,9 @@
 - Implementation plan: `docs/superpowers/plans/2026-09-03-ultimate-guitar-vst-v0.1.md`
 - Working branch: `build/v0.1-implementation`
 - Isolated worktree: `.worktrees/v0.1-implementation`
-- Task 1: LOCALLY COMPLETE — project activation/native reproducible build; independent branch CI pending push
-- Next implementation slice: Task 2 — deterministic sample-library scanner and stable manifest
+- Task 1: COMPLETE — project activation/native reproducible build independently verified on commit `91e177644921c0b0b22116985491f13eea3d33c0`
+- Task 2: LOCALLY COMPLETE — deterministic scanner/stable manifest; independent branch CI pending push
+- Next implementation slice: Task 3 — canonical MIDI mapping and runtime manifest pools
 - Design source: `DESIGN_SYSTEM.md`
 - Threat model: `THREAT_MODEL.md`
 
@@ -19,15 +20,17 @@
 - iPlug2 is pinned to `d54f69050f517e43b941d88c2a170f0a840b9ee4`.
 - Steinberg VST3 SDK is pinned to `3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96`.
 - Minimal required VST3 submodules are restored without the unrelated documentation/tutorial checkout that hit Windows MAX_PATH.
-- Task 1 TDD: 11 Python activation/regression tests pass, including exact pin restore, actionable dependency recovery, secret-scan behavior, CI/action pinning and warning-free fresh Release build.
+- Task 1 TDD: 13 Python activation/regression tests pass, including exact pin restore, actionable dependency recovery, secret-scan behavior, CI/action pinning, Python-bytecode hygiene, VS2026 hosted-runner discovery and warning-free fresh Release build.
 - Native Debug and Release CTest both pass.
+- GitHub Actions on `91e177644921c0b0b22116985491f13eea3d33c0`: `Quality` run 33816644066 = success and `Template Integrity` run 33816644034 = success; this includes the VS2026 `windows-2025` runner.
 - Aggregate `scripts/verify.ps1 -SkipReleaseChecks` passes secret scan, tests, Debug/Release builds, repository validator, context integrity/freshness and every positive/negative canary.
-- Real sample source remains external to Git at the previously verified Palm Mutes / Down Stroke location; 1,655 WAVs are not copied into this repository.
+- Real sample source remains external to Git. A fresh 2026-09-04 scanner audit independently counts 1,660 WAVs across all 104 side/note pools; none are copied into this repository.
+- Task 2 scanner suite: 14 focused tests pass directly and via Debug/Release CTest; full local `scripts/verify.ps1 -SkipReleaseChecks` passes with 27 Python tests total.
+- Fresh real-bank manifest SHA-256: `72c68f33ce3a195051075dafa868ce988b6b2a9e8264ec480107aca093f618a1`; remaining holes are Left S1 MIDI15 take 4, Right S2 MIDI29 take 8, Right S3 MIDI56 takes 4/5.
 
 ## Current priority
-Commit and push the verified Task 1 activation slice, confirm independent GitHub Actions quality evidence, then begin Task 2 test-first against synthetic fixtures and the real 1,655-WAV bank.
+Commit/push the verified Task 2 scanner slice, confirm independent GitHub Actions, then begin Task 3 test-first.
 
 ## Known blockers
-- No local Task 1 blocker.
-- Independent Windows CI for the implementation branch is not evidence until the verified commit is pushed and its workflow completes.
+- No local Task 1 or Task 2 implementation blocker.
 - Public distribution under the internal name `UltimateGuitar` remains outside v0.1 until naming/trademark review.
