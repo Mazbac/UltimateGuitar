@@ -87,7 +87,7 @@ Reason: this is the verified physical/sample-library structure and fixes prior a
 ## D-017 — Variation uses real available samples, never nominal take slots
 Status: accepted
 Decision: Each side+note has an independent shuffled bag built from manifest entries that actually exist. Missing/non-contiguous take numbers do not create placeholders or silence.
-Reason: the real library already contains valid 11/14/15-take pools; fixed 16-position assumptions caused the failure class the native plugin must eliminate.
+Reason: the design-time library contained valid 11/14/15-take pools, and the current bank still contains non-contiguous 14/15-take pools; fixed 16-position assumptions caused the failure class the native plugin must eliminate.
 
 ## D-018 — Raw sample audio stays out of ordinary Git history
 Status: accepted
@@ -98,3 +98,28 @@ Reason: the current single articulation is already about 0.5 GiB and future arti
 Status: accepted
 Decision: Load/decode the validated bank off the audio thread into a process-wide immutable cache shared by plugin instances. Palm mutes remain one-shot and note-off does not choke them.
 Reason: the current bank is manageable in memory once, while two normal Left/Right instances should not duplicate roughly 0.5 GiB each. This is simpler and safer than introducing disk streaming in the first release.
+
+## D-020 — Use MSVC through VsDevCmd + Ninja for reproducible local Windows builds
+Status: accepted
+Decision: Detect supported Visual Studio 2019/2022 C++ installations, enter their x64 developer environment with `VsDevCmd.bat`, and configure the project with Ninja rather than depending on CMake's Visual Studio instance registry.
+Reason: the user's existing VS2019 Build Tools has a complete MSVC/SDK/CMake/Ninja toolchain but is not visible to CMake's Visual Studio generator. Ninja inside VsDevCmd is verified to compile successfully and is also compatible with iPlug2's CMake workflow.
+
+## D-021 — Restore only build-required VST3 SDK submodules during normal bootstrap
+Status: accepted
+Decision: Pin the VST3 SDK superproject and restore `base`, `cmake`, `pluginterfaces` and `public.sdk`; do not recursively checkout unrelated documentation/tutorial/VSTGUI submodules for the plugin build.
+Reason: the full recursive SDK checkout pulls the `doc` submodule and hit Windows MAX_PATH, while the selected build-required submodules are sufficient for the project-owned VST3 build path. The validator may add only the dependencies it actually needs when verified later.
+
+## D-022 — Support Visual Studio 2026 hosted runners
+Status: accepted
+Decision: Extend toolchain discovery to Visual Studio 2026 (18/Enterprise, BuildTools and Community) while retaining verified VS2019/2022 compatibility.
+Reason: GitHub Actions windows-2025 now resolves to the VS2026 runner image, and independent CI proved the older 2019/2022-only probe rejected an otherwise valid C++ runner.
+
+## D-023 — Preserve narrow compatibility with two legacy `HighStroke` filenames
+Status: accepted
+Decision: The manifest scanner accepts the canonical `... High Stroke Middle.wav` form plus the exact legacy omission `... HighStroke Middle.wav`; all side, folder-note and take validation remains strict.
+Reason: the live 2026-09-04 bank contains exactly two otherwise-valid recordings with this separator typo. Renaming raw source files is unnecessary/destructive, while broad filename tolerance would weaken manifest integrity.
+
+## D-024 — Runtime manifest pools are bounded to 64 real samples
+Status: accepted
+Decision: The v0.1 runtime manifest rejects more than 64 entries for one side+MIDI pool while retaining arbitrary non-contiguous take IDs within the valid uint16 range.
+Reason: the realtime VariationEngine uses fixed-capacity 64-entry shuffle bags to avoid render-time allocation; the file trust boundary must reject data the realtime domain cannot safely represent.

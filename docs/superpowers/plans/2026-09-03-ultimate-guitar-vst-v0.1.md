@@ -66,15 +66,15 @@
 - Produces: `IPLUG2_DIR=<repo>/.deps/iPlug2`; VST3 SDK at `.deps/iPlug2/Dependencies/IPlug/VST3_SDK`; CMake target `UltimateGuitarCoreTests`; aggregate `scripts/verify.ps1`.
 - Pins: iPlug2 `d54f69050f517e43b941d88c2a170f0a840b9ee4`; VST3 SDK `3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96`.
 
-- [ ] **Step 1: Make the local Windows toolchain bootstrap autonomous**
+- [x] **Step 1: Make the local Windows toolchain bootstrap autonomous**
 
-`scripts/bootstrap-toolchain.ps1` first locates Visual Studio 2022 Build Tools/Community through `vswhere.exe` and confirms MSVC x64, a Windows SDK and CMake are present. If absent, download Microsoft's official VS 2022 Build Tools bootstrapper from `https://aka.ms/vs/17/release/vs_BuildTools.exe` and invoke it with `--quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.CMake.Project --includeRecommended`. After installation, resolve the developer environment through `VsDevCmd.bat -arch=x64`. If Windows requires a UAC consent that automation cannot cross, stop with that single explicit authorization blocker; do not ask the user to select workloads manually.
+`scripts/bootstrap-toolchain.ps1` first locates a supported Visual Studio 2019, 2022 or 2026 C++ installation and confirms MSVC x64, a Windows 10+ SDK and CMake >=3.14 are present. Prefer an already-installed supported toolchain; on the current development machine VS2019 Build Tools at `C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools` provides MSVC 14.29, Windows SDK 10.0.19041.0 and CMake 3.20. If no supported installation exists, download Microsoft's official VS 2022 Build Tools bootstrapper from `https://aka.ms/vs/17/release/vs_BuildTools.exe` and invoke it with `--quiet --wait --norestart --nocache --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Component.VC.CMake.Project --includeRecommended`. Resolve the chosen developer environment through its `VsDevCmd.bat -arch=x64`. If Windows requires a UAC consent that automation cannot cross, stop with that single explicit authorization blocker; do not ask the user to select workloads manually.
 
-- [ ] **Step 2: Write bootstrap dependency assertions before cloning anything**
+- [x] **Step 2: Write bootstrap dependency assertions before cloning anything**
 
 Create `cmake/UltimateGuitarDependencies.cmake` so configure fails unless `${IPLUG2_DIR}/iPlug2.cmake` and `${IPLUG2_DIR}/Dependencies/IPlug/VST3_SDK/public.sdk` exist. The error must name `scripts/bootstrap.ps1` as the recovery command.
 
-- [ ] **Step 3: Implement the idempotent pinned dependency bootstrap**
+- [x] **Step 3: Implement the idempotent pinned dependency bootstrap**
 
 `scripts/bootstrap.ps1` must clone iPlug2 into `.deps/iPlug2`, checkout the exact iPlug2 SHA, clone VST3 SDK recursively into `Dependencies/IPlug/VST3_SDK`, checkout the exact VST3 SHA, and reject dirty dependency trees instead of resetting user edits silently.
 
@@ -84,32 +84,32 @@ $vst3Sha  = '3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96'
 # clone when absent; otherwise verify origin, cleanliness and exact HEAD
 ```
 
-- [ ] **Step 4: Create the minimal CMake/test skeleton and verify failure before sources exist**
+- [x] **Step 4: Create the minimal CMake/test skeleton and verify failure before sources exist**
 
-Configure with `cmake -S . -B build -A x64 -DIPLUG2_DIR="$PWD/.deps/iPlug2"`; expected first failure is missing planned test source, proving the configure path reaches project-owned targets.
-- [ ] **Step 5: Activate manifest/project lifecycle with exact commands**
+Configure through the detected x64 `VsDevCmd.bat` environment with the Ninja generator and `-DIPLUG2_DIR=<repo>/.deps/iPlug2`; the dependency guard is contract-tested to fail with an actionable `scripts/bootstrap.ps1` recovery message when dependencies are absent.
+- [x] **Step 5: Activate manifest/project lifecycle with exact commands**
 
 Set manifest to `mode: project`, lifecycle `DEFINE`, stack `C++17 + iPlug2/VST3`, runtime `Windows x64 native`, package manager `git-pinned source dependencies`, database `none`; set build/unit/integration/verify commands to the PowerShell/CMake commands created in this task. Mark web-only fields such as Playwright/devUrl explicitly not applicable.
 
-- [ ] **Step 6: Create the durable design source before broad UI work**
+- [x] **Step 6: Create the durable design source before broad UI work**
 
 `DESIGN_SYSTEM.md` must define Ferrari-red hero surfaces, black hardware/fretboard surfaces, angular asymmetric geometry, restrained metallic highlights, compact studio density, original angular-guitar motif, no Jackson marks/copied photography, and control-state/accessibility rules. Mirror numeric/color tokens in `src/ui/DesignTokens.h` rather than scattering literals later.
 
-- [ ] **Step 7: Create the concrete threat model and working-tree secret gate**
+- [x] **Step 7: Create the concrete threat model and working-tree secret gate**
 
 `THREAT_MODEL.md` records assets (raw recordings, installed sample bank, plugin/DAW stability, settings), entry points (MIDI, host state chunks, manifest TSV, WAV bytes, user-selected paths, build dependencies), and abuse/failure cases (path traversal, malformed RIFF sizes, corrupt/hash-mismatched audio, dependency drift, oversized allocations, worker teardown races). Runtime has no network or credentials. Mitigations are strict manifest/path/WAV validation, pinned dependencies, elevation only for the FL Studio-required machine VST/content install while runtime remains unprivileged, immutable loaded data and no untrusted execution.
 
 `scripts/secret-scan.ps1` obtains tracked files plus `git ls-files --others --exclude-standard`, excludes `.deps/`, `build/` and binary extensions, and fails on PEM private-key headers, `AKIA[0-9A-Z]{16}`, `gh[pousr]_[A-Za-z0-9_]{36,}` or `sk-[A-Za-z0-9_-]{20,}`. It reports only file + pattern class, never the matched secret value.
 
-- [ ] **Step 8: Add clean Windows CI**
+- [x] **Step 8: Add clean Windows CI**
 
 `.github/workflows/quality.yml` runs on PR/push with `contents: read`, checks out full SHA-pinned actions, uses CMake/MSVC available on `windows-2025`, runs bootstrap, configure, build, CTest, Python unittest, repository validation/context integrity and secret scan; it uses only the already pinned `actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803` and `actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38`, then leaves build status as the gate; release artifacts are produced by the separately verified packaging path.
 
-- [ ] **Step 9: Run activation gates**
+- [x] **Step 9: Run activation gates**
 
 Run `node .automation/context-pack.mjs --scope all`, read through the completion marker, then run `node .automation/validate.mjs`, `node .automation/context-integrity.mjs`, `node .automation/context-pack.mjs --check` and `node .automation/self-test.mjs`. Expected: all PASS with lifecycle `DEFINE`.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add .project CMakeLists.txt cmake scripts .github DESIGN_SYSTEM.md THREAT_MODEL.md src/ui/DesignTokens.h STATUS.md PLAN.md ARCHITECTURE.md DECISIONS.md .gitignore
@@ -132,7 +132,7 @@ git commit -m "build: activate UltimateGuitar native VST project"
 - Produces `library-report.txt` with pool counts/missing nominal take numbers and format summary.
 - Exit code 0 only when every accepted file is stereo/48k/32-bit IEEE-float and maps to one canonical note.
 
-- [ ] **Step 1: Write failing Python tests for parsing and known incomplete pools**
+- [x] **Step 1: Write failing Python tests for parsing and known incomplete pools**
 
 ```python
 class ManifestTests(unittest.TestCase):
@@ -146,24 +146,24 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(parse_wav_filename('Right', 'E', 'R10 E Stroke Middle.wav'), 10)
 ```
 
-- [ ] **Step 2: Run the focused test and confirm RED**
+- [x] **Step 2: Run the focused test and confirm RED**
 
 Run: `python -m unittest tests.python.test_library_manifest -v`. Expected: import/function failures because `tools.library_manifest` does not exist.
 
-- [ ] **Step 3: Implement exact folder/note/take parsing plus RIFF format validation**
+- [x] **Step 3: Implement exact folder/note/take parsing plus RIFF format validation**
 
 Use only Python stdlib. Normalize folder labels case-insensitively, but map them through these explicit per-string tables rather than directory order: S1 `b starting note=11,c=12,c#=13,d=14,d#=15,e=16,f=17,f#=18,g=19,g#=20,a high=21,a# high=22,b high=23`; S2 `e starting note=28,f=29,f#=30,g=31,g#=32,a high=33,a# high=34,b high=35,c high=36,c# high=37,d high=38,d# high=39,e high=40`; S3 `a starting note=45,a#=46,b=47,c=48,c#=49,d=50,d#=51,e=52,f=53,f#=54,g=55,g#=56,a high=57`; S4 `d starting note=62,d#=63,e=64,f=65,f#=66,g=67,g#=68,a high=69,a# high=70,b high=71,c high=72,c# high=73,d high=74`.
 
-Accept filenames case-insensitively only when they match `^(L|R)([1-9][0-9]*) ([A-G](?:#)?)( High)? Stroke Middle\.wav$`; the L/R prefix must match the side folder, the note/high token must match the mapped folder, and the numeric take becomes the manifest take ID. `Starting Note` appears only in the folder and is intentionally absent from the WAV filename. Parse RIFF chunks directly so IEEE-float WAV format tag `3` is supported; reject mono, non-48k, non-32-bit, non-float or malformed files with path-specific errors.
-- [ ] **Step 4: Add deterministic manifest/report emission**
+Accept canonical filenames case-insensitively using the planned pattern; live audit also found exactly two legacy `HighStroke` separator typos, so accept that narrow `HighStroke` variant only when the side and note/high token still match the mapped folder. The L/R prefix must match the side folder and the numeric take becomes the manifest take ID. `Starting Note` appears only in the folder and is intentionally absent from the WAV filename. Parse RIFF chunks directly so IEEE-float WAV format tag `3` is supported; reject mono, non-48k, non-32-bit, non-float or malformed files with path-specific errors.
+- [x] **Step 4: Add deterministic manifest/report emission**
 
 Normalize relative paths with `/`, sort by `(side, string, midi, take)`, compute SHA-256 while scanning, and write UTF-8 with `\n` line endings. Duplicate `(side,string,midi,take)` entries are fatal; missing take numbers are warnings only.
 
-- [ ] **Step 5: Generate tiny synthetic float-WAV fixtures in the test itself**
+- [x] **Step 5: Generate tiny synthetic float-WAV fixtures in the test itself**
 
 The test helper writes a valid RIFF/WAVE format-tag-3 stereo 48k/32-bit file with known frame count; do not commit private recordings. Add invalid mono and invalid 44.1k fixtures to prove rejection.
 
-- [ ] **Step 6: Validate against the real local library**
+- [x] **Step 6: Validate against the real local library**
 
 Run:
 ```powershell
@@ -172,9 +172,9 @@ python tools/library_manifest.py `
   --manifest build/library/manifest.tsv `
   --report build/library/library-report.txt
 ```
-Expected: 1,655 rows and warnings exactly matching Left S1 D#=15, Right S1 E=11, Right S2 F=15, Right S3 G#=14; no fatal format/mapping errors.
+Current live expectation (re-audited 2026-09-04): 1,660 rows across 104 pools, with warnings exactly matching Left S1 D#=15, Right S2 F=15 and Right S3 G#=14; Right S1 E is now complete at 16 takes. No fatal format/mapping errors.
 
-- [ ] **Step 7: Run GREEN and commit**
+- [x] **Step 7: Run GREEN and commit**
 
 Run `python -m unittest tests.python.test_library_manifest -v` and `scripts/verify.ps1 -SkipNativeBuild` until PASS, then:
 ```bash
@@ -199,7 +199,7 @@ class Manifest { public: static Manifest LoadTsv(const std::filesystem::path&); 
 const std::array<uint8_t,32>& Digest() const noexcept; };
 ```
 
-- [ ] **Step 1: Write RED mapping tests covering all boundaries and gaps**
+- [x] **Step 1: Write RED mapping tests covering all boundaries and gaps**
 
 ```cpp
 UG_TEST(mapping_is_sparse_and_exclusive) {
@@ -212,18 +212,18 @@ UG_TEST(mapping_is_sparse_and_exclusive) {
 }
 ```
 
-- [ ] **Step 2: Implement only the four canonical inclusive ranges**
+- [x] **Step 2: Implement only the four canonical inclusive ranges**
 
 Use constant range records `{11,23,S1}`, `{28,40,S2}`, `{45,57,S3}`, `{62,74,S4}`; do not infer octave labels or fill gaps.
 
-- [ ] **Step 3: Write RED manifest tests for independent side/note pools**
+- [x] **Step 3: Write RED manifest tests for independent side/note pools**
 
 Construct a temporary TSV with Right/MIDI16 takes `1,10,16`, Left/MIDI16 takes `1,2`, and another string's same pitch-class name. Assert `Pool(Right,16).size()==3`, sorted take IDs are `1,10,16`, and no Left/other-string entries leak in.
-- [ ] **Step 4: Implement strict TSV loading and pool indexing**
+- [x] **Step 4: Implement strict TSV loading and pool indexing**
 
-Reject bad column counts, invalid side/string enums, MIDI outside the declared string's range, duplicate `(side,midi,take)`, unsafe absolute/parent-traversal relative paths, zero frames, paths longer than 512 UTF-8 bytes, more than 4,096 manifest entries, frames above 480,000 (10 seconds at 48 kHz), and malformed SHA-256. Compute and retain SHA-256 of the exact TSV bytes as `Digest()`, then build fixed `[2][128]` vectors so `Pool()` is lookup-only after construction.
+Reject bad column counts, invalid side/string enums, MIDI outside the declared string's range, duplicate `(side,midi,take)`, unsafe absolute/parent-traversal relative paths, zero frames, paths longer than 512 UTF-8 bytes, ASCII control bytes in paths, more than 4,096 manifest entries, more than 64 entries in one side+MIDI pool, frames above 480,000 (10 seconds at 48 kHz), and malformed SHA-256. Compute and retain SHA-256 of the exact TSV bytes as `Digest()`, then build fixed `[2][128]` vectors so `Pool()` is lookup-only after construction.
 
-- [ ] **Step 5: Run native core tests at x64 Debug and Release**
+- [x] **Step 5: Run native core tests at x64 Debug and Release**
 
 Run:
 ```powershell
@@ -234,7 +234,7 @@ ctest --test-dir build -C Release --output-on-failure
 ```
 Expected: mapping/manifest tests PASS in both configurations.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/core tests CMakeLists.txt
@@ -508,7 +508,7 @@ Use `SetCompressor /SOLID zlib` and `RequestExecutionLevel admin` because FL Stu
 
 Uninstaller removes only the installed `UltimateGuitar.vst3`, product-owned `%PROGRAMDATA%\UltimateGuitar\Samples\v0.1`, and its uninstaller. Per-user `%LOCALAPPDATA%\UltimateGuitar\settings.txt` is explicitly treated as user preference data and preserved across uninstall/reinstall; a future in-product reset may delete it deliberately. The uninstaller must never delete raw recordings or arbitrary alternate library folders. Remove now-empty machine-wide product directories only after child deletion succeeds.
 
-- [ ] **Step 6: Build a real local package from the 1,655-WAV library**
+- [ ] **Step 6: Build a real local package from the 1,660-WAV library**
 
 Run `tools/library_manifest.py` against the verified raw root, `tools/package_samples.py` into `build/package/Samples/v0.1`, copy `build/out/UltimateGuitar.vst3` into staging, then run NSIS to produce `build/release/UltimateGuitar-0.1.0-win64.exe`.
 
@@ -555,7 +555,7 @@ if($LASTEXITCODE -ne 0){ throw 'VST3 validator failed' }
 ```
 - [ ] **Step 4: Install the exact candidate and make FL Studio discover it**
 
-Run the produced `UltimateGuitar-0.1.0-win64.exe` as the current user. Through Desktop Commander/native UI automation, launch FL Studio, open Manage plugins, run a verified scan, and confirm one `UltimateGuitar` VST3 entry resolves from the per-user VST3 path. Do not ask the user to click or relay logs.
+Run the produced `UltimateGuitar-0.1.0-win64.exe` as the current user. Through Desktop Commander/native UI automation, launch FL Studio, open Manage plugins, run a verified scan, and confirm one `UltimateGuitar` VST3 entry resolves from the system `C:\Program Files\Common Files\VST3` path used by the installer. Do not ask the user to click or relay logs.
 
 - [ ] **Step 5: Exercise the golden playback journey in FL Studio**
 
@@ -599,4 +599,4 @@ git commit -m "test: verify UltimateGuitar v0.1 release candidate"
 ---
 
 ## Plan completion contract
-Execution is complete only when Tasks 1-10 are checked, each task's tests passed before its commit, the real 1,655-WAV bank was validated/package-tested without entering Git, Steinberg Validator passes, FL Studio golden journeys pass, the installer lifecycle passes, repository/context/CI gates are green and current `QUALITY_EVIDENCE.md` has no unresolved release blocker.
+Execution is complete only when Tasks 1-10 are checked, each task's tests passed before its commit, the current real 1,660-WAV bank was validated/package-tested without entering Git, Steinberg Validator passes, FL Studio golden journeys pass, the installer lifecycle passes, repository/context/CI gates are green and current `QUALITY_EVIDENCE.md` has no unresolved release blocker.

@@ -24,3 +24,9 @@ tmp/
 
 # Isolated implementation worktrees
 .worktrees/
+.deps/
+build/
+
+# Python test/runtime cache
+__pycache__/
+*.py[cod]

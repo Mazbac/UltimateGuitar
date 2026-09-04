@@ -1,14 +1,16 @@
 {
   "$schema": "./manifest.schema.json",
   "schemaVersion": 3,
-  "mode": "template",
-  "lifecycle": "TEMPLATE",
+  "mode": "project",
+  "lifecycle": "DEFINE",
   "project": {
-    "name": "UNSET",
-    "summary": "UNSET",
-    "appType": "UNSET",
-    "primaryUsers": [],
-    "firstRelease": "UNSET"
+    "name": "UltimateGuitar",
+    "summary": "Reliable sample-based metal guitar VST3 using the current Palm Mute / Downstroke / Middle Left/Right recordings.",
+    "appType": "native audio instrument plugin",
+    "primaryUsers": [
+      "FL Studio metal music producers"
+    ],
+    "firstRelease": "Windows x64 VST3 v0.1 with four strict string zones and Left/Right performance banks"
   },
   "context": {
     "invariant": "session-invariance",
@@ -27,44 +29,49 @@
     "contextPackCommand": "node .automation/context-pack.mjs"
   },
   "stack": {
-    "primary": "UNSET",
-    "runtime": "UNSET",
-    "packageManager": "UNSET",
-    "database": "UNSET"
+    "primary": "C++17 + iPlug2/VST3",
+    "runtime": "Windows x64 native",
+    "packageManager": "git-pinned source dependencies",
+    "database": "none"
   },
   "commands": {
-    "bootstrap": null,
-    "dev": null,
-    "format": null,
-    "lint": null,
+    "bootstrap": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/bootstrap.ps1",
+    "dev": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build.ps1 -Configuration Debug",
+    "format": "git diff --check",
+    "lint": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/secret-scan.ps1",
     "typecheck": null,
-    "unit": null,
-    "integration": null,
+    "unit": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build.ps1 -Configuration Debug -RunTests",
+    "integration": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1 -SkipReleaseChecks",
     "e2e": null,
-    "build": null,
-    "verify": null
+    "build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build.ps1 -Configuration Release",
+    "verify": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1"
   },
   "ui": {
-    "hasUserInterface": false,
-    "kind": "UNSET",
-    "platform": "UNSET",
+    "hasUserInterface": true,
+    "kind": "native VST3 plugin editor",
+    "platform": "Windows x64 / FL Studio",
     "devUrl": null,
     "playwright": false,
-    "designSystem": null,
-    "designTokens": null,
-    "componentStrategy": "UNSET",
-    "accessibilityTarget": "UNSET",
-    "visualRegression": "UNSET"
+    "designSystem": "DESIGN_SYSTEM.md",
+    "designTokens": "src/ui/DesignTokens.h",
+    "componentStrategy": "iPlug2 IGraphics primitives behind UltimateGuitar-owned layout, tokens and control contracts",
+    "accessibilityTarget": "keyboard-operable controls, visible focus, high-contrast states and correct 100-150% Windows/FL Studio scaling",
+    "visualRegression": "UI-contract tests plus current screenshots at Ready/Problem and supported scaling before release"
   },
   "experience": {
-    "audience": "UNSET",
-    "installer": "UNSET",
-    "onboarding": "UNSET",
-    "updater": "UNSET",
-    "recovery": "UNSET",
-    "reset": "UNSET",
-    "uninstaller": "UNSET",
-    "goldenJourneys": []
+    "audience": "DAW users who should not need SFZ or developer knowledge",
+    "installer": "NSIS Windows installer; one UAC elevation for FL Studio system VST3 and shared sample content",
+    "onboarding": "automatic sample discovery; no wizard when the bundled bank is healthy",
+    "updater": "not-applicable in v0.1; reinstall a newer signed/versioned candidate",
+    "recovery": "friendly library Problem state with Locate Sample Library; raw diagnostics stay secondary",
+    "reset": "remove or replace per-user sampleRoot setting; product samples remain untouched",
+    "uninstaller": "remove only product-owned VST3/shared sample content and preserve per-user settings",
+    "goldenJourneys": [
+      "Install -> FL Studio verified scan -> plugin Ready -> first mapped note plays",
+      "Returning project -> saved controls/seed restore -> deterministic playback",
+      "Missing/incompatible library -> Problem -> Locate Sample Library -> Ready",
+      "Uninstall -> product-owned files removed -> reinstall -> Ready without touching raw recordings"
+    ]
   },
   "quality": {
     "definitionOfDone": "docs/DEFINITION_OF_DONE.md",
@@ -78,8 +85,8 @@
     "requireChallengerReview": true
   },
   "release": {
-    "artifact": "UNSET",
-    "deployment": "UNSET",
-    "rollback": "UNSET"
+    "artifact": "build/release/UltimateGuitar-0.1.0-win64.exe",
+    "deployment": "Windows install to Program Files/Common Files/VST3 plus ProgramData/UltimateGuitar/Samples/v0.1",
+    "rollback": "uninstall candidate and reinstall previous versioned candidate; never modify raw recordings"
   }
 }

@@ -1,32 +1,40 @@
 # Current State
 
-- Lifecycle: TEMPLATE
+- Lifecycle: DEFINE
 - Foundation status: READY
 - Manifest schema: v3
-- Project discovery: COMPLETE for v0.1 native palm-mute VST direction
-- Written design: `docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md`
-- Design review: APPROVED by user on 2026-09-04
+- Project discovery/design: COMPLETE and user-approved for v0.1
 - Implementation plan: `docs/superpowers/plans/2026-09-03-ultimate-guitar-vst-v0.1.md`
-- Planning review: COMPLETE; no implementation has started
-- Project activation: NEXT; begins at implementation Task 1
-- Working branch: `product/v0.1-design`
-- Draft design PR: #1 (`product/v0.1-design` -> `main`)
-- Independent PR CI: GREEN — Template Integrity run `33808806395` on design commit `87bb7e61f77375479038d3f784159dae21cbdf10`
+- Working branch: `build/v0.1-implementation`
+- Isolated worktree: `.worktrees/v0.1-implementation`
+- Task 1: COMPLETE — project activation/native reproducible build independently verified on commit `91e177644921c0b0b22116985491f13eea3d33c0`
+- Task 2: COMPLETE — deterministic scanner/stable manifest independently verified on commit `3dd4f74bc6f45dbd0ae5ba4728ea77e42b23dafe`
+- Task 3: LOCALLY COMPLETE — canonical MIDI mapping and strict runtime manifest pools; independent branch CI pending push
+- Next implementation slice: Task 4 — deterministic real-take variation and plugin state
+- Design source: `DESIGN_SYSTEM.md`
+- Threat model: `THREAT_MODEL.md`
 
 ## Verified live evidence
-- Desktop Commander connected to the user's Windows machine.
-- Local project clone exists at `C:\Users\Alihan & Maaike\Documents\UltimateGuitar`.
-- Template validator, context integrity and context-pack freshness are green for the current discovery state.
-- GitHub has no open pull request for this repository at the start of this slice.
-- Real sample source located at `C:\Users\Alihan & Maaike\Music\UltimateGuitar\00_RAW_Recordings\Palm Mutes\Down Stroke`.
-- Current bank contains 1,655 WAVs / about 0.504 GiB; all inspected files are stereo 48 kHz 32-bit IEEE-float WAVs.
-- Canonical mapping verified from current SFZ/report and folders: S1 MIDI 11-23, S2 28-40, S3 45-57, S4 62-74.
-- Incomplete pools verified: Left S1 D#=15; Right S1 E=11; Right S2 F=15; Right S3 G#=14.
+- Desktop Commander is connected to the user's Windows machine.
+- Existing Visual Studio 2019 Build Tools provides MSVC 19.29 x64, Windows SDK 10.0.19041.0, CMake 3.20 and Ninja.
+- Ninja inside `VsDevCmd.bat -arch=x64` configures/builds the native C++ test target without compiler warnings.
+- iPlug2 is pinned to `d54f69050f517e43b941d88c2a170f0a840b9ee4`.
+- Steinberg VST3 SDK is pinned to `3cdf9ca5d1f5b1b21e0a86832aa4abe55607bd96`.
+- Minimal required VST3 submodules are restored without the unrelated documentation/tutorial checkout that hit Windows MAX_PATH.
+- Task 1 TDD: 13 Python activation/regression tests pass, including exact pin restore, actionable dependency recovery, secret-scan behavior, CI/action pinning, Python-bytecode hygiene, VS2026 hosted-runner discovery and warning-free fresh Release build.
+- Native Debug and Release CTest both pass.
+- GitHub Actions on `91e177644921c0b0b22116985491f13eea3d33c0`: `Quality` run 33816644066 = success and `Template Integrity` run 33816644034 = success; this includes the VS2026 `windows-2025` runner.
+- Aggregate `scripts/verify.ps1 -SkipReleaseChecks` passes secret scan, tests, Debug/Release builds, repository validator, context integrity/freshness and every positive/negative canary.
+- Real sample source remains external to Git. A fresh 2026-09-04 scanner audit independently counts 1,660 WAVs across all 104 side/note pools; none are copied into this repository.
+- Task 2 scanner suite: 14 focused tests pass directly and via Debug/Release CTest; full local `scripts/verify.ps1 -SkipReleaseChecks` passes with 27 Python tests total.
+- Fresh real-bank manifest SHA-256: `72c68f33ce3a195051075dafa868ce988b6b2a9e8264ec480107aca093f618a1`; remaining holes are Left S1 MIDI15 take 4, Right S2 MIDI29 take 8, Right S3 MIDI56 takes 4/5.
+- GitHub Actions on `3dd4f74bc6f45dbd0ae5ba4728ea77e42b23dafe`: `Quality` run 33818702081 = success and `Template Integrity` run 33818702229 = success.
+- Task 3 Debug/Release domain tests pass for all 128 MIDI values, strict TSV validation, known SHA-256 vector, path/control-byte defenses and the 64-entry pool cap.
+- A compiled C++ runtime probe loads the real Task 2 manifest as 1,660 entries / 104 pools and reproduces digest `72c68f33ce3a195051075dafa868ce988b6b2a9e8264ec480107aca093f618a1`.
 
 ## Current priority
-Execute the approved implementation plan beginning with Task 1: activate project mode, bootstrap/verify the Windows toolchain, pin iPlug2/VST3 dependencies, create the design/threat-model sources and establish clean Windows CI.
+Commit/push the verified Task 3 core slice, confirm independent GitHub Actions, then begin Task 4 test-first.
 
 ## Known blockers
-- No product blocker.
-- Local CMake/MSVC build tools were not found on PATH during discovery; implementation must either locate an existing Visual Studio installation or install/configure the required free Windows C++ toolchain autonomously where authorization permits.
-- Public distribution under the internal name `UltimateGuitar` is not part of v0.1; public naming/trademark review is required before external release.
+- No local Task 1, Task 2 or Task 3 implementation blocker.
+- Public distribution under the internal name `UltimateGuitar` remains outside v0.1 until naming/trademark review.

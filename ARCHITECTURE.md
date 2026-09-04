@@ -33,3 +33,18 @@ The runtime trust boundary is local MIDI + host audio/state input and a versione
 The canonical sparse MIDI map is S1 11-23, S2 28-40, S3 45-57 and S4 62-74. A note maps to exactly one string and the selected Left/Right performance bank. Variation selects only manifest entries that actually exist; incomplete take numbering is valid.
 
 Raw WAVs remain outside ordinary Git history. Development resolves the private source bank through a local override; release packaging creates a stable per-user product-owned sample layout. Detailed v0.1 behavior is defined in `docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md`.
+## Windows build architecture
+Local and CI Windows builds enter a supported Visual Studio 2019/2022/2026 x64 developer environment and use CMake + Ninja. This intentionally avoids reliance on Visual Studio instance registration while preserving MSVC ABI/toolchain behavior.
+
+Build dependencies live only under ignored `.deps/`. iPlug2 is exact-SHA pinned; the nested Steinberg VST3 SDK is exact-SHA pinned and restores only build-required submodules (`base`, `cmake`, `pluginterfaces`, `public.sdk`) during normal bootstrap. Dirty or wrong-origin dependency trees are rejected instead of reset silently.
+
+`THREAT_MODEL.md` is the project security source for runtime/file/dependency trust boundaries. The aggregate `scripts/verify.ps1` combines working-tree secret scan, Python contract tests, Debug/Release native tests and repository/context integrity checks.
+## Sample-manifest tooling
+`tools/library_manifest.py` is the deterministic development/release boundary from raw recordings to runtime metadata. It maps explicit per-string folder labels to MIDI numbers, validates accepted WAVs as stereo 48 kHz IEEE-float32, hashes each file, and emits LF-normalized TSV rows sorted by side/string/MIDI/take. Missing take numbers are reported but never materialized as empty rows.
+
+A 2026-09-04 live scan validates 1,660 WAVs / 104 pools. Two legacy filenames use `HighStroke` without the normal separator; only that narrow variant is accepted, while side/folder/note matching stays strict. Synthetic fixtures exercise historical 11-entry and current non-contiguous pools without committing private recordings.
+
+## Runtime manifest boundary
+`Manifest::LoadTsv` consumes the exact scanner TSV bytes, retains their SHA-256 digest, and builds immutable `[2][128]` side/MIDI pools sorted by real take id. It rejects invalid headers/columns, side/string/MIDI mismatches, duplicate identities, unsafe or control-byte paths, zero/oversized frame counts, malformed hashes, oversized manifests and more than 64 entries in one note pool.
+
+The 64-entry per-pool cap is the v0.1 contract shared with the fixed-capacity realtime `VariationEngine`; invalid metadata is rejected before it can reach the audio thread. A local C++ probe has loaded the current 1,660-row / 104-pool real manifest and matched its scanner digest.

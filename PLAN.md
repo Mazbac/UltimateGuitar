@@ -15,9 +15,9 @@
 - [x] Write the detailed v0.1 implementation plan.
 
 1. Invoke the writing-plans workflow and produce the detailed implementation plan.
-2. Activate `.project/manifest.json` from template to project mode at lifecycle DEFINE with exact commands and project metadata.
-3. Pin the iPlug2/VST3 dependency revisions and establish a reproducible Windows x64 CMake build plus GitHub Actions CI.
-4. Build the sample-manifest scanner/validator test-first using tiny synthetic WAV fixtures and validate it against the real local sample library.
+2. [x] Activate `.project/manifest.json` from template to project mode at lifecycle DEFINE with exact commands and project metadata.
+3. [x] Pin the iPlug2/VST3 dependency revisions and establish a reproducible Windows x64 CMake/Ninja build plus GitHub Actions quality workflow; independent branch CI is checked after push.
+4. [x] Build the sample-manifest scanner/validator test-first using tiny synthetic WAV fixtures and validate it against the real local sample library.
 5. Build mapping, variation and plugin-state domain logic test-first.
 6. Build real-time-safe sample loading/cache, resampling and one-shot voice engine test-first.
 7. Add VST3 integration and compact plugin UI, then validate in the Steinberg validator and FL Studio.

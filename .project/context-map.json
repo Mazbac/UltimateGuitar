@@ -15,7 +15,8 @@
     "docs/DEFINITION_OF_DONE.md",
     "docs/TOOL_POLICY.md",
     "docs/superpowers/specs/2026-09-03-ultimate-guitar-vst-v0.1-design.md",
-    "docs/superpowers/plans/2026-09-03-ultimate-guitar-vst-v0.1.md"
+    "docs/superpowers/plans/2026-09-03-ultimate-guitar-vst-v0.1.md",
+    "THREAT_MODEL.md"
   ],
   "lifecycle": {
     "TEMPLATE": [
@@ -98,7 +99,8 @@
     ],
     "security": [
       "docs/SECURITY_STANDARD.md",
-      "RISKS.md"
+      "RISKS.md",
+      "THREAT_MODEL.md"
     ],
     "testing": [
       "docs/TEST_STRATEGY.md",
