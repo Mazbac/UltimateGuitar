@@ -43,3 +43,8 @@ Build dependencies live only under ignored `.deps/`. iPlug2 is exact-SHA pinned;
 `tools/library_manifest.py` is the deterministic development/release boundary from raw recordings to runtime metadata. It maps explicit per-string folder labels to MIDI numbers, validates accepted WAVs as stereo 48 kHz IEEE-float32, hashes each file, and emits LF-normalized TSV rows sorted by side/string/MIDI/take. Missing take numbers are reported but never materialized as empty rows.
 
 A 2026-09-04 live scan validates 1,660 WAVs / 104 pools. Two legacy filenames use `HighStroke` without the normal separator; only that narrow variant is accepted, while side/folder/note matching stays strict. Synthetic fixtures exercise historical 11-entry and current non-contiguous pools without committing private recordings.
+
+## Runtime manifest boundary
+`Manifest::LoadTsv` consumes the exact scanner TSV bytes, retains their SHA-256 digest, and builds immutable `[2][128]` side/MIDI pools sorted by real take id. It rejects invalid headers/columns, side/string/MIDI mismatches, duplicate identities, unsafe or control-byte paths, zero/oversized frame counts, malformed hashes, oversized manifests and more than 64 entries in one note pool.
+
+The 64-entry per-pool cap is the v0.1 contract shared with the fixed-capacity realtime `VariationEngine`; invalid metadata is rejected before it can reach the audio thread. A local C++ probe has loaded the current 1,660-row / 104-pool real manifest and matched its scanner digest.

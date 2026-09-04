@@ -118,3 +118,8 @@ Reason: GitHub Actions windows-2025 now resolves to the VS2026 runner image, and
 Status: accepted
 Decision: The manifest scanner accepts the canonical `... High Stroke Middle.wav` form plus the exact legacy omission `... HighStroke Middle.wav`; all side, folder-note and take validation remains strict.
 Reason: the live 2026-09-04 bank contains exactly two otherwise-valid recordings with this separator typo. Renaming raw source files is unnecessary/destructive, while broad filename tolerance would weaken manifest integrity.
+
+## D-024 — Runtime manifest pools are bounded to 64 real samples
+Status: accepted
+Decision: The v0.1 runtime manifest rejects more than 64 entries for one side+MIDI pool while retaining arbitrary non-contiguous take IDs within the valid uint16 range.
+Reason: the realtime VariationEngine uses fixed-capacity 64-entry shuffle bags to avoid render-time allocation; the file trust boundary must reject data the realtime domain cannot safely represent.

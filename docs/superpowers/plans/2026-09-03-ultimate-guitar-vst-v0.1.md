@@ -199,7 +199,7 @@ class Manifest { public: static Manifest LoadTsv(const std::filesystem::path&); 
 const std::array<uint8_t,32>& Digest() const noexcept; };
 ```
 
-- [ ] **Step 1: Write RED mapping tests covering all boundaries and gaps**
+- [x] **Step 1: Write RED mapping tests covering all boundaries and gaps**
 
 ```cpp
 UG_TEST(mapping_is_sparse_and_exclusive) {
@@ -212,18 +212,18 @@ UG_TEST(mapping_is_sparse_and_exclusive) {
 }
 ```
 
-- [ ] **Step 2: Implement only the four canonical inclusive ranges**
+- [x] **Step 2: Implement only the four canonical inclusive ranges**
 
 Use constant range records `{11,23,S1}`, `{28,40,S2}`, `{45,57,S3}`, `{62,74,S4}`; do not infer octave labels or fill gaps.
 
-- [ ] **Step 3: Write RED manifest tests for independent side/note pools**
+- [x] **Step 3: Write RED manifest tests for independent side/note pools**
 
 Construct a temporary TSV with Right/MIDI16 takes `1,10,16`, Left/MIDI16 takes `1,2`, and another string's same pitch-class name. Assert `Pool(Right,16).size()==3`, sorted take IDs are `1,10,16`, and no Left/other-string entries leak in.
-- [ ] **Step 4: Implement strict TSV loading and pool indexing**
+- [x] **Step 4: Implement strict TSV loading and pool indexing**
 
-Reject bad column counts, invalid side/string enums, MIDI outside the declared string's range, duplicate `(side,midi,take)`, unsafe absolute/parent-traversal relative paths, zero frames, paths longer than 512 UTF-8 bytes, more than 4,096 manifest entries, frames above 480,000 (10 seconds at 48 kHz), and malformed SHA-256. Compute and retain SHA-256 of the exact TSV bytes as `Digest()`, then build fixed `[2][128]` vectors so `Pool()` is lookup-only after construction.
+Reject bad column counts, invalid side/string enums, MIDI outside the declared string's range, duplicate `(side,midi,take)`, unsafe absolute/parent-traversal relative paths, zero frames, paths longer than 512 UTF-8 bytes, ASCII control bytes in paths, more than 4,096 manifest entries, more than 64 entries in one side+MIDI pool, frames above 480,000 (10 seconds at 48 kHz), and malformed SHA-256. Compute and retain SHA-256 of the exact TSV bytes as `Digest()`, then build fixed `[2][128]` vectors so `Pool()` is lookup-only after construction.
 
-- [ ] **Step 5: Run native core tests at x64 Debug and Release**
+- [x] **Step 5: Run native core tests at x64 Debug and Release**
 
 Run:
 ```powershell
@@ -234,7 +234,7 @@ ctest --test-dir build -C Release --output-on-failure
 ```
 Expected: mapping/manifest tests PASS in both configurations.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/core tests CMakeLists.txt

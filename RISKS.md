@@ -30,7 +30,7 @@ New material risks must be added when discovered and closed only with evidence.
 
 | Risk | Impact | Required mitigation |
 |---|---|---|
-| Fixed 16-take logic reappears | Valid repeated notes become silent on incomplete pools | Manifest enumerates real files; scanner/variation tests retain historical 11-entry plus current 14/15-take non-contiguous pools |
+| Fixed 16-take logic reappears | Valid repeated notes become silent on incomplete pools | Manifest enumerates real files; scanner/variation tests retain historical 11-entry plus current 14/15-take non-contiguous pools; runtime manifest caps each pool at the 64-entry realtime capacity |
 | String zones overlap or borrow samples | Wrong physical string/timbre plays for a MIDI note | MIDI-number mapping is canonical and unit-tested as one-string-only with intentional silent gaps |
 | Per-instance full sample duplication | Normal Left+Right workflow consumes excessive RAM | Process-wide immutable shared cache keyed by library version/root |
 | Sample I/O or allocation reaches audio thread | Clicks, dropouts or host instability | Background loading; immutable ready buffers; instrumentation/tests for real-time path constraints |

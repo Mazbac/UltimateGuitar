@@ -32,3 +32,26 @@ else()
 endif()
 
 add_test(NAME core-smoke COMMAND UltimateGuitarCoreTests)
+
+add_library(UltimateGuitarCore STATIC
+  src/core/MidiMap.cpp
+  src/core/Manifest.cpp
+)
+target_include_directories(UltimateGuitarCore PUBLIC src)
+
+add_executable(UltimateGuitarDomainTests
+  tests/TestMain.cpp
+  tests/test_mapping.cpp
+  tests/test_manifest.cpp
+)
+target_include_directories(UltimateGuitarDomainTests PRIVATE tests)
+target_link_libraries(UltimateGuitarDomainTests PRIVATE UltimateGuitarCore)
+
+if(MSVC)
+  target_compile_options(UltimateGuitarCore PRIVATE /WX)
+  target_compile_options(UltimateGuitarDomainTests PRIVATE /WX)
+else()
+  target_compile_options(UltimateGuitarCore PRIVATE -Wall -Wextra -Wpedantic -Werror)
+  target_compile_options(UltimateGuitarDomainTests PRIVATE -Wall -Wextra -Wpedantic -Werror)
+endif()
+add_test(NAME core-domain COMMAND UltimateGuitarDomainTests)

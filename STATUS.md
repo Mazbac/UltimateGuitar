@@ -9,7 +9,8 @@
 - Isolated worktree: `.worktrees/v0.1-implementation`
 - Task 1: COMPLETE — project activation/native reproducible build independently verified on commit `91e177644921c0b0b22116985491f13eea3d33c0`
 - Task 2: COMPLETE — deterministic scanner/stable manifest independently verified on commit `3dd4f74bc6f45dbd0ae5ba4728ea77e42b23dafe`
-- Next implementation slice: Task 3 — canonical MIDI mapping and runtime manifest pools
+- Task 3: LOCALLY COMPLETE — canonical MIDI mapping and strict runtime manifest pools; independent branch CI pending push
+- Next implementation slice: Task 4 — deterministic real-take variation and plugin state
 - Design source: `DESIGN_SYSTEM.md`
 - Threat model: `THREAT_MODEL.md`
 
@@ -28,10 +29,12 @@
 - Task 2 scanner suite: 14 focused tests pass directly and via Debug/Release CTest; full local `scripts/verify.ps1 -SkipReleaseChecks` passes with 27 Python tests total.
 - Fresh real-bank manifest SHA-256: `72c68f33ce3a195051075dafa868ce988b6b2a9e8264ec480107aca093f618a1`; remaining holes are Left S1 MIDI15 take 4, Right S2 MIDI29 take 8, Right S3 MIDI56 takes 4/5.
 - GitHub Actions on `3dd4f74bc6f45dbd0ae5ba4728ea77e42b23dafe`: `Quality` run 33818702081 = success and `Template Integrity` run 33818702229 = success.
+- Task 3 Debug/Release domain tests pass for all 128 MIDI values, strict TSV validation, known SHA-256 vector, path/control-byte defenses and the 64-entry pool cap.
+- A compiled C++ runtime probe loads the real Task 2 manifest as 1,660 entries / 104 pools and reproduces digest `72c68f33ce3a195051075dafa868ce988b6b2a9e8264ec480107aca093f618a1`.
 
 ## Current priority
-Begin Task 3 test-first: canonical MIDI mapping and strict runtime manifest pools.
+Commit/push the verified Task 3 core slice, confirm independent GitHub Actions, then begin Task 4 test-first.
 
 ## Known blockers
-- No local Task 1 or Task 2 implementation blocker.
+- No local Task 1, Task 2 or Task 3 implementation blocker.
 - Public distribution under the internal name `UltimateGuitar` remains outside v0.1 until naming/trademark review.
